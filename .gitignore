@@ -1,0 +1,12 @@
+Output/
+*.hex
+*.emSession 
+*.jlink
+*.eww
+nrfutil.exe
+nRF_MDK_8_40_3_IAR_BSDLicense.msi
+*.txt
+*.mp4
+*.bak
+*.png
+*.jpg
