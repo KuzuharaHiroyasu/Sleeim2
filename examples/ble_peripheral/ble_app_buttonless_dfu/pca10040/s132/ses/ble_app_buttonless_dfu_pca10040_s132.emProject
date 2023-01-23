@@ -96,6 +96,8 @@
       <file file_name="../../../../../../modules/nrfx/drivers/src/nrfx_timer.c" />
       <file file_name="../../../../../../modules/nrfx/drivers/src/nrfx_saadc.c" />
       <file file_name="../../../../../../modules/nrfx/drivers/src/nrfx_ppi.c" />
+      <file file_name="../../../../../../modules/nrfx/drivers/src/nrfx_twi.c" />
+      <file file_name="../../../../../../integration/nrfx/legacy/nrf_drv_twi.c" />
     </folder>
     <folder Name="Board Support">
       <file file_name="../../../../../../components/libraries/bsp/bsp.c" />
@@ -125,6 +127,10 @@
       <file file_name="../../../state_manager_tbl.h" />
       <file file_name="../../../saadc.c" />
       <file file_name="../../../saadc.h" />
+      <folder Name="i2c">
+        <file file_name="../../../i2c/eeprom.c" />
+        <file file_name="../../../i2c/i2c.c" />
+      </folder>
     </folder>
     <folder Name="nRF_SVC">
       <file file_name="../../../../../../components/libraries/bootloader/dfu/nrf_dfu_svci.c" />

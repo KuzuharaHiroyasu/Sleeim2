@@ -881,7 +881,7 @@ int main(void)
     saadc_sampling_event_init();
     saadc_sampling_event_enable();
 
-//    i2c_init();
+    i2c_init();
 
     // Start execution.
     application_timers_start();
