@@ -64,6 +64,7 @@
 #include "ble_advdata.h"
 #include "ble_advertising.h"
 #include "ble_conn_params.h"
+#include "nrf_delay.h"
 #include "nrf_sdh.h"
 #include "nrf_sdh_soc.h"
 #include "nrf_sdh_ble.h"
@@ -87,7 +88,7 @@
 #include "nrf_log_default_backends.h"
 #include "nrf_bootloader_info.h"
 
-#define DEVICE_NAME                     "Nordic_Buttonless"                         /**< Name of device. Will be included in the advertising data. */
+#define DEVICE_NAME                     "SLeeim2"                         /**< Name of device. Will be included in the advertising data. */
 #define MANUFACTURER_NAME               "NordicSemiconductor"                       /**< Manufacturer. Will be passed to Device Information Service. */
 #define APP_ADV_INTERVAL                300                                         /**< The advertising interval (in units of 0.625 ms. This value corresponds to 187.5 ms). */
 #define APP_ADV_DURATION                18000                                       /**< The advertising duration (180 seconds) in units of 10 milliseconds. */
@@ -122,6 +123,7 @@ BLE_ADVERTISING_DEF(m_advertising);                                             
 
 static uint16_t m_conn_handle = BLE_CONN_HANDLE_INVALID;                            /**< Handle of the current connection. */
 static void advertising_start(bool erase_bonds);                                    /**< Forward declaration of advertising start function */
+static void gpio_init(void);
 
 // YOUR_JOB: Use UUIDs for service(s) used in your application.
 static ble_uuid_t m_adv_uuids[] = {{BLE_UUID_DEVICE_INFORMATION_SERVICE, BLE_UUID_TYPE_BLE}};
@@ -849,10 +851,11 @@ int main(void)
     ret_code_t err_code;
 
     log_init();
-
+#if ( DEBUG_BOOTLOADER == 0 )
     // Initialize the async SVCI interface to bootloader before any interrupts are enabled.
     err_code = ble_dfu_buttonless_async_svci_init();
     APP_ERROR_CHECK(err_code);
+#endif
 
     timers_init();
     power_management_init();
@@ -864,8 +867,9 @@ int main(void)
     advertising_init();
     services_init();
     conn_params_init();
+    gpio_init();
 
-    NRF_LOG_INFO("Buttonless DFU Application started.");
+//    NRF_LOG_INFO("Buttonless DFU Application started.");
 
     // Start execution.
     application_timers_start();
@@ -874,10 +878,33 @@ int main(void)
     // Enter main loop.
     for (;;)
     {
-        idle_state_handle();
+        nrf_gpio_pin_write(NRF_GPIO_PIN_MAP(0,10), 1); // LED High
+        nrf_delay_ms(500);
+        nrf_gpio_pin_write(NRF_GPIO_PIN_MAP(0,10), 0); // LED Low
+        nrf_delay_ms(500);
+//        idle_state_handle();
     }
 }
 
+static void gpio_init(void)
+{
+    // input
+//    nrf_gpio_cfg_input(NRF_GPIO_PIN_MAP(0, 0), NRF_GPIO_PIN_PULLUP); // 空き
+//    nrf_gpio_cfg_input(NRF_GPIO_PIN_MAP(0, 1), NRF_GPIO_PIN_PULLUP); // 空き
+    nrf_gpio_cfg_input(NRF_GPIO_PIN_MAP(0, 2), NRF_GPIO_PIN_PULLUP); // ADC入力（イビキ）
+    nrf_gpio_cfg_input(NRF_GPIO_PIN_MAP(0, 3), NRF_GPIO_PIN_PULLUP); // ADC入力（心拍）
+    nrf_gpio_cfg_input(NRF_GPIO_PIN_MAP(0, 5), NRF_GPIO_PIN_PULLUP); // ADC入力（電池）
+    nrf_gpio_cfg_input(NRF_GPIO_PIN_MAP(0, 6), NRF_GPIO_PIN_PULLUP); // SW入力
+    nrf_gpio_cfg_input(NRF_GPIO_PIN_MAP(0, 9), NRF_GPIO_PIN_PULLUP); // 空き
+    nrf_gpio_cfg_input(NRF_GPIO_PIN_MAP(0, 18), NRF_GPIO_PIN_PULLUP); // 充電
+    nrf_gpio_cfg_input(NRF_GPIO_PIN_MAP(0, 20), NRF_GPIO_PIN_PULLUP); // 空き
+    nrf_gpio_cfg_input(NRF_GPIO_PIN_MAP(0, 21), NRF_GPIO_PIN_PULLUP); // リセット
+    nrf_gpio_cfg_input(NRF_GPIO_PIN_MAP(0, 28), NRF_GPIO_PIN_PULLUP); // ADC入力(呼吸）
+
+    // output
+    nrf_gpio_cfg_output(NRF_GPIO_PIN_MAP(0, 4)); // 電源制御
+    nrf_gpio_cfg_output(NRF_GPIO_PIN_MAP(0,10)); // LED
+}
 /**
  * @}
  */

@@ -1,5 +1,8 @@
 <!DOCTYPE CrossStudio_Project_File>
-<solution Name="ble_app_buttonless_dfu_pca10040_s132" target="8" version="2">
+<solution
+  Name="ble_app_buttonless_dfu_pca10040_s132"
+  target="8"
+  version="2">
   <project Name="ble_app_buttonless_dfu_pca10040_s132">
     <configuration
       Name="Common"
@@ -15,27 +18,27 @@
       arm_simulator_memory_simulation_parameter="RWX 00000000,00100000,FFFFFFFF;RWX 20000000,00010000,CDCDCDCD"
       arm_target_device_name="nRF52832_xxAA"
       arm_target_interface_type="SWD"
-      c_user_include_directories="../../../config;../../../../../../components;../../../../../../components/ble/ble_advertising;../../../../../../components/ble/ble_services/ble_dfu;../../../../../../components/ble/common;../../../../../../components/ble/nrf_ble_gatt;../../../../../../components/ble/nrf_ble_qwr;../../../../../../components/ble/peer_manager;../../../../../../components/boards;../../../../../../components/libraries/atomic;../../../../../../components/libraries/atomic_fifo;../../../../../../components/libraries/atomic_flags;../../../../../../components/libraries/balloc;../../../../../../components/libraries/bootloader;../../../../../../components/libraries/bootloader/ble_dfu;../../../../../../components/libraries/bootloader/dfu;../../../../../../components/libraries/bsp;../../../../../../components/libraries/button;../../../../../../components/libraries/crc16;../../../../../../components/libraries/delay;../../../../../../components/libraries/experimental_section_vars;../../../../../../components/libraries/fds;../../../../../../components/libraries/fstorage;../../../../../../components/libraries/log;../../../../../../components/libraries/log/src;../../../../../../components/libraries/memobj;../../../../../../components/libraries/mutex;../../../../../../components/libraries/pwr_mgmt;../../../../../../components/libraries/ringbuf;../../../../../../components/libraries/scheduler;../../../../../../components/libraries/sortlist;../../../../../../components/libraries/strerror;../../../../../../components/libraries/svc;../../../../../../components/libraries/timer;../../../../../../components/libraries/util;../../../../../../components/softdevice/common;../../../../../../components/softdevice/s132/headers;../../../../../../components/softdevice/s132/headers/nrf52;../../../../../../components/toolchain/cmsis/include;../../../../../../external/fprintf;../../../../../../external/segger_rtt;../../../../../../integration/nrfx;../../../../../../integration/nrfx/legacy;../../../../../../modules/nrfx;../../../../../../modules/nrfx/drivers/include;../../../../../../modules/nrfx/hal;../../../../../../modules/nrfx/mdk;../config;"
       c_preprocessor_definitions="APP_TIMER_V2;APP_TIMER_V2_RTC1_ENABLED;BL_SETTINGS_ACCESS_ONLY;BOARD_PCA10040;CONFIG_GPIO_AS_PINRESET;FLOAT_ABI_HARD;INITIALIZE_USER_SECTIONS;NO_VTOR_CONFIG;NRF52;NRF52832_XXAA;NRF52_PAN_74;NRF_DFU_SVCI_ENABLED;NRF_DFU_TRANSPORT_BLE=1;NRF_SD_BLE_API_VERSION=7;S132;SOFTDEVICE_PRESENT;"
-      debug_target_connection="J-Link"
-      gcc_entry_point="Reset_Handler"
-      macros="CMSIS_CONFIG_TOOL=../../../../../../external_tools/cmsisconfig/CMSIS_Configuration_Wizard.jar"
-      debug_register_definition_file="../../../../../../modules/nrfx/mdk/nrf52.svd"
+      c_user_include_directories="../../../config;../../../../../../components;../../../../../../components/ble/ble_advertising;../../../../../../components/ble/ble_services/ble_dfu;../../../../../../components/ble/common;../../../../../../components/ble/nrf_ble_gatt;../../../../../../components/ble/nrf_ble_qwr;../../../../../../components/ble/peer_manager;../../../../../../components/boards;../../../../../../components/libraries/atomic;../../../../../../components/libraries/atomic_fifo;../../../../../../components/libraries/atomic_flags;../../../../../../components/libraries/balloc;../../../../../../components/libraries/bootloader;../../../../../../components/libraries/bootloader/ble_dfu;../../../../../../components/libraries/bootloader/dfu;../../../../../../components/libraries/bsp;../../../../../../components/libraries/button;../../../../../../components/libraries/crc16;../../../../../../components/libraries/delay;../../../../../../components/libraries/experimental_section_vars;../../../../../../components/libraries/fds;../../../../../../components/libraries/fstorage;../../../../../../components/libraries/log;../../../../../../components/libraries/log/src;../../../../../../components/libraries/memobj;../../../../../../components/libraries/mutex;../../../../../../components/libraries/pwr_mgmt;../../../../../../components/libraries/ringbuf;../../../../../../components/libraries/scheduler;../../../../../../components/libraries/sortlist;../../../../../../components/libraries/strerror;../../../../../../components/libraries/svc;../../../../../../components/libraries/timer;../../../../../../components/libraries/util;../../../../../../components/softdevice/common;../../../../../../components/softdevice/s132/headers;../../../../../../components/softdevice/s132/headers/nrf52;../../../../../../components/toolchain/cmsis/include;../../../../../../external/fprintf;../../../../../../external/segger_rtt;../../../../../../integration/nrfx;../../../../../../integration/nrfx/legacy;../../../../../../modules/nrfx;../../../../../../modules/nrfx/drivers/include;../../../../../../modules/nrfx/hal;../../../../../../modules/nrfx/mdk;../config;../../../ble;../../../calc"
       debug_additional_load_file="../../../../../../components/softdevice/s132/hex/s132_nrf52_7.2.0_softdevice.hex"
+      debug_register_definition_file="../../../../../../modules/nrfx/mdk/nrf52.svd"
       debug_start_from_entry_point_symbol="No"
-      gcc_debugging_level="Level 3"      linker_output_format="hex"
-      linker_printf_width_precision_supported="Yes"
+      debug_target_connection="J-Link"
+      gcc_debugging_level="Level 3"
+      gcc_entry_point="Reset_Handler"
+      linker_output_format="hex"
       linker_printf_fmt_level="long"
+      linker_printf_width_precision_supported="Yes"
       linker_scanf_fmt_level="long"
       linker_section_placement_file="flash_placement.xml"
       linker_section_placement_macros="FLASH_PH_START=0x0;FLASH_PH_SIZE=0x80000;RAM_PH_START=0x20000000;RAM_PH_SIZE=0x10000;FLASH_START=0x26000;FLASH_SIZE=0x52000;RAM_START=0x20002260;RAM_SIZE=0xdda0"
-      
       linker_section_placements_segments="FLASH1 RX 0x0 0x80000;RAM1 RWX 0x20000000 0x10000;uicr_bootloader_start_address RX 0x10001014 0x4"
+      macros="CMSIS_CONFIG_TOOL=../../../../../../external_tools/cmsisconfig/CMSIS_Configuration_Wizard.jar"
       project_directory=""
       project_type="Executable" />
-      <folder Name="Segger Startup Files">
-        <file file_name="$(StudioDir)/source/thumb_crt0.s" />
-      </folder>
+    <folder Name="Segger Startup Files">
+      <file file_name="$(StudioDir)/source/thumb_crt0.s" />
+    </folder>
     <folder Name="nRF_Log">
       <file file_name="../../../../../../components/libraries/log/src/nrf_log_backend_rtt.c" />
       <file file_name="../../../../../../components/libraries/log/src/nrf_log_backend_serial.c" />
@@ -78,6 +81,7 @@
       <file file_name="../../../../../../components/libraries/experimental_section_vars/nrf_section_iter.c" />
       <file file_name="../../../../../../components/libraries/sortlist/nrf_sortlist.c" />
       <file file_name="../../../../../../components/libraries/strerror/nrf_strerror.c" />
+      <file file_name="../../../../../../components/libraries/delay/nrf_delay.h" />
     </folder>
     <folder Name="nRF_Drivers">
       <file file_name="../../../../../../integration/nrfx/legacy/nrf_drv_clock.c" />
@@ -96,6 +100,25 @@
     <folder Name="Application">
       <file file_name="../../../main.c" />
       <file file_name="../config/sdk_config.h" />
+      <folder Name="ble" />
+      <folder Name="calc">
+        <folder Name="acl">
+          <file file_name="../../../calc/acl/calc_acl.c" />
+          <file file_name="../../../calc/acl/calc_acl.h" />
+        </folder>
+        <folder Name="breath">
+          <file file_name="../../../calc/breath/calc_apnea.c" />
+          <file file_name="../../../calc/breath/apnea_param.h" />
+          <file file_name="../../../calc/breath/calc_apnea.h" />
+          <file file_name="../../../calc/breath/calc_snore.c" />
+          <file file_name="../../../calc/breath/calc_snore.h" />
+          <file file_name="../../../calc/breath/movave_param.h" />
+        </folder>
+      </folder>
+      <file file_name="../../../main.h" />
+      <file file_name="../../../state_manager.c" />
+      <file file_name="../../../state_manager.h" />
+      <file file_name="../../../state_manager_tbl.h" />
     </folder>
     <folder Name="nRF_SVC">
       <file file_name="../../../../../../components/libraries/bootloader/dfu/nrf_dfu_svci.c" />
@@ -136,12 +159,20 @@
       <file file_name="../../../../../../components/softdevice/common/nrf_sdh_ble.c" />
       <file file_name="../../../../../../components/softdevice/common/nrf_sdh_soc.c" />
     </folder>
+    <configuration
+      Name="Release"
+      c_preprocessor_definitions="CONFIG_NFCT_PINS_AS_GPIOS;DEBUG_BOOTLOADER=0" />
+    <configuration
+      Name="Debug"
+      c_preprocessor_definitions="CONFIG_NFCT_PINS_AS_GPIOS;DEBUG_BOOTLOADER=1" />
   </project>
-  <configuration Name="Release"
+  <configuration
+    Name="Release"
     c_preprocessor_definitions="NDEBUG"
-    link_time_optimization="No"    gcc_optimization_level="Optimize For Size" />
-  <configuration Name="Debug"
+    gcc_optimization_level="Optimize For Size"
+    link_time_optimization="No" />
+  <configuration
+    Name="Debug"
     c_preprocessor_definitions="DEBUG; DEBUG_NRF"
-    gcc_optimization_level="None"/>
-
+    gcc_optimization_level="None" />
 </solution>
