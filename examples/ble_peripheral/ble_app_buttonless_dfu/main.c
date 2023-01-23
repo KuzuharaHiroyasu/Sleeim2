@@ -129,8 +129,19 @@ BLE_ADVERTISING_DEF(m_advertising);                                             
 
 static uint16_t m_conn_handle = BLE_CONN_HANDLE_INVALID;                            /**< Handle of the current connection. */
 static void advertising_start(bool erase_bonds);                                    /**< Forward declaration of advertising start function */
-static void gpio_init(void);
 
+static void timers_init(void);
+static void power_management_init(void);
+static void application_timers_start(void);
+static void gpio_init(void);
+static void sw_proc(void);
+
+APP_TIMER_DEF(m_mic_timer_id);  
+APP_TIMER_DEF(m_sw_timer_id);
+APP_TIMER_DEF(m_acl_timer_id);
+APP_TIMER_DEF(m_result_timer_id); 
+
+SW  sw = {0};
 // YOUR_JOB: Use UUIDs for service(s) used in your application.
 static ble_uuid_t m_adv_uuids[] = {{BLE_UUID_DEVICE_INFORMATION_SERVICE, BLE_UUID_TYPE_BLE}};
 
@@ -318,30 +329,6 @@ static void pm_evt_handler(pm_evt_t const * p_evt)
     pm_handler_flash_clean(p_evt);
 }
 
-
-/**@brief Function for the Timer initialization.
- *
- * @details Initializes the timer module. This creates and starts application timers.
- */
-static void timers_init(void)
-{
-
-    // Initialize timer module.
-    uint32_t err_code = app_timer_init();
-    APP_ERROR_CHECK(err_code);
-
-    // Create timers.
-
-    /* YOUR_JOB: Create any timers to be used by the application.
-                 Below is an example of how to create a timer.
-                 For every new timer needed, increase the value of the macro APP_TIMER_MAX_TIMERS by
-                 one.
-       uint32_t err_code;
-       err_code = app_timer_create(&m_app_timer_id, APP_TIMER_MODE_REPEATED, timer_timeout_handler);
-       APP_ERROR_CHECK(err_code); */
-}
-
-
 /**@brief Function for the GAP initialization.
  *
  * @details This function sets up all the necessary GAP (Generic Access Profile) parameters of the
@@ -513,18 +500,6 @@ static void conn_params_init(void)
     err_code = ble_conn_params_init(&cp_init);
     APP_ERROR_CHECK(err_code);
 }
-
-
-/**@brief Function for starting timers.
- */
-static void application_timers_start(void)
-{
-    /* YOUR_JOB: Start your timers. below is an example of how to start a timer.
-       uint32_t err_code;
-       err_code = app_timer_start(m_app_timer_id, TIMER_INTERVAL, NULL);
-       APP_ERROR_CHECK(err_code); */
-}
-
 
 /**@brief Function for putting the chip into sleep mode.
  *
@@ -916,6 +891,191 @@ static void gpio_init(void)
     // output
     nrf_gpio_cfg_output(NRF_GPIO_PIN_MAP(0, 4)); // 電源制御
     nrf_gpio_cfg_output(NRF_GPIO_PIN_MAP(0,10)); // LED
+}
+
+static void mic_timeout_handler(void * p_context)
+{
+    UNUSED_PARAMETER(p_context);
+
+    uint16_t snore_value;
+    uint16_t breath_value;
+
+    snore_value = get_saadc_value(SAADC_CH_SNORE);
+    breath_value = get_saadc_value(SAADC_CH_BREATH);
+
+    calc_data_set(snore_value, breath_value);
+}
+
+static void sw_timeout_handler(void * p_context)
+{
+    UNUSED_PARAMETER(p_context);
+
+    sw_proc();
+
+    user_main_mode();
+}
+
+static void acl_timeout_handler(void * p_context)
+{
+    UNUSED_PARAMETER(p_context);
+    main_acl_read();
+}
+
+static void result_timeout_handler(void * p_context)
+{
+    UNUSED_PARAMETER(p_context);
+}
+
+static void timers_init(void)
+{
+    // Initialize timer module.
+    uint32_t err_code = app_timer_init();
+    APP_ERROR_CHECK(err_code);
+
+    // Create timers.
+    // 50ms
+    err_code = app_timer_create(&m_mic_timer_id, APP_TIMER_MODE_REPEATED, mic_timeout_handler);
+    APP_ERROR_CHECK(err_code);
+    
+    // 10ms
+    err_code = app_timer_create(&m_sw_timer_id, APP_TIMER_MODE_REPEATED, sw_timeout_handler);
+    APP_ERROR_CHECK(err_code);
+
+    // 10sec
+    err_code = app_timer_create(&m_acl_timer_id, APP_TIMER_MODE_REPEATED, acl_timeout_handler);
+    APP_ERROR_CHECK(err_code);
+
+    // 30sec
+    err_code = app_timer_create(&m_result_timer_id, APP_TIMER_MODE_REPEATED, result_timeout_handler);
+    APP_ERROR_CHECK(err_code);
+
+}
+
+static void application_timers_start(void)
+{
+       uint32_t err_code;
+       err_code = app_timer_start(m_mic_timer_id, APP_TIMER_TICKS(TIMER_MIC_GET_PERIOD), NULL);
+       APP_ERROR_CHECK(err_code);
+
+       err_code = app_timer_start(m_sw_timer_id, APP_TIMER_TICKS(TIMER_SW_PERIOD), NULL);
+       APP_ERROR_CHECK(err_code);
+
+//       err_code = app_timer_start(m_result_timer_id, APP_TIMER_TICKS(TIMER_RESULT_PERIOD), NULL);
+//       APP_ERROR_CHECK(err_code);
+}
+
+void acl_timers_start(void)
+{
+    uint32_t err_code;
+    
+    err_code = app_timer_start(m_acl_timer_id, APP_TIMER_TICKS(TIMER_ACL_PERIOD), NULL);
+    APP_ERROR_CHECK(err_code);  
+}
+
+void acl_timers_stop(void)
+{
+    uint32_t err_code;
+    
+    err_code = app_timer_stop(m_acl_timer_id);
+    APP_ERROR_CHECK(err_code);  
+}
+
+
+void result_timers_start(void)
+{
+    uint32_t err_code;
+    
+    err_code = app_timer_start(m_result_timer_id, APP_TIMER_TICKS(TIMER_RESULT_PERIOD), NULL);
+    APP_ERROR_CHECK(err_code);  
+}
+
+void result_timers_stop(void)
+{
+    uint32_t err_code;
+    
+    err_code = app_timer_stop(m_result_timer_id);
+    APP_ERROR_CHECK(err_code);  
+}
+
+static void sw_proc(void)
+{
+    uint8_t pow_sw;
+    uint8_t bat;
+    SYSTEM_MODE	mode = get_current_mode();
+
+//    pow_sw = 
+	
+    if(sw.power_off_ope_start == ON)
+    {
+	sw.power_off_timer++;
+    }
+	
+    if( ON == pow_sw ){		// ON処理
+	// 電源SW押下タイマー継続
+	sw.sw_time_cnt++;
+	if(sw.power_off_ope_start == ON && mode == SYSTEM_MODE_IDLE_COM)
+	{
+	    if(sw.power_off_timer == TIME_250MS_CNT_POW_OFF_SW_LONG)
+	    { // パワーOFF操作 Step.2: Step.1後0.6秒以内から5秒長押し
+//		bat = drv_i_port_bat_chg_detect();
+		if(bat == ON)
+		{
+//		    led_green_on();
+		    sw.sw_power_off = ON;
+		}
+	    }
+	}else{
+	    if(mode == SYSTEM_MODE_INITIAL)
+	    {
+		// INITIAL状態(初回電源ON時)は電源SW長押し確定時に回路ON、LED点灯
+//		write1_sfr(P1, 4, 1);	// 電源ON
+//		led_green_on();
+	    }else if(sw.sw_time_cnt == TIME_2000MS_CNT_POW_SW_LONG){
+		sw.power_off_ope_start = OFF;
+		// 規定時間以上連続押下と判断
+		evt_act( EVENT_POW_SW_LONG );
+	    }
+	}
+    }else{// OFF処理
+	if(sw.power_off_timer >= TIME_600MS_CNT_POW_OFF_STEP1_TIMEOUT)
+	{// 「パワーOFF操作 Step.1短押し」の後、0.6秒以上経過するとフラグOFF
+	    sw.power_off_ope_start = OFF;
+	    sw.power_off_timer = 0;
+	    if(sw.sw_power_off == ON)
+	    {
+		sw.sw_power_off = OFF;
+//		write1_sfr(P1, 4, 0);	// 電源OFF
+	    }
+	}
+	
+	if( ON == sw.pow_sw_last ){
+	// ON→OFFエッジ
+	    if( sw.sw_time_cnt >= TIME_2000MS_CNT_POW_SW_LONG){
+		// ON確定時にイベント発生済みなのでここでは何もしない
+	    }else if( sw.sw_time_cnt >= TIME_20MS_CNT_POW_SW_SHORT){
+		evt_act( EVENT_POW_SW_SHORT );
+//		bat = drv_i_port_bat_chg_detect();
+		if(bat == ON)
+		{
+		    // パワーOFF操作 Step.1:短押し
+		    sw.power_off_ope_start = ON;
+		    sw.power_off_timer = 0;
+		}
+	    }else{
+		    // 何もしない
+	    }
+	    
+	    // INITIAL状態(初回電源ON時)は電源SW長押し離し時にLED消灯し、IDLE状態へ移行
+	    if(mode == SYSTEM_MODE_INITIAL)
+	    {
+		evt_act( EVENT_POW_SW_LONG );
+//		led_green_off();
+	    }
+	}
+	// 電源SW押下タイマー再スタート 
+	sw.sw_time_cnt = 0;
+    }
+    sw.pow_sw_last = pow_sw;
 }
 /**
  * @}

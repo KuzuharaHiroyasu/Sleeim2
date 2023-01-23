@@ -106,27 +106,24 @@
     <folder Name="Application">
       <file file_name="../../../main.c" />
       <file file_name="../config/sdk_config.h" />
-      <folder Name="ble" />
+      <folder Name="ble">
+        <file file_name="../../../ble/ble_command.c" />
+        <file file_name="../../../ble/ble_command_tbl.h" />
+      </folder>
       <folder Name="calc">
         <folder Name="acl">
           <file file_name="../../../calc/acl/calc_acl.c" />
-          <file file_name="../../../calc/acl/calc_acl.h" />
         </folder>
         <folder Name="breath">
           <file file_name="../../../calc/breath/calc_apnea.c" />
-          <file file_name="../../../calc/breath/apnea_param.h" />
-          <file file_name="../../../calc/breath/calc_apnea.h" />
           <file file_name="../../../calc/breath/calc_snore.c" />
-          <file file_name="../../../calc/breath/calc_snore.h" />
-          <file file_name="../../../calc/breath/movave_param.h" />
         </folder>
+        <file file_name="../../../calc/calc_data.c" />
       </folder>
       <file file_name="../../../main.h" />
       <file file_name="../../../state_manager.c" />
-      <file file_name="../../../state_manager.h" />
       <file file_name="../../../state_manager_tbl.h" />
       <file file_name="../../../saadc.c" />
-      <file file_name="../../../saadc.h" />
       <folder Name="i2c">
         <file file_name="../../../i2c/eeprom.c" />
         <file file_name="../../../i2c/i2c.c" />

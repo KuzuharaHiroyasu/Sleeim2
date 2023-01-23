@@ -128,12 +128,12 @@ static void user_main_mode_sensing(void)
 
 static void user_main_mode_get(void)
 {
-    wrapper_data_get();
+//    wrapper_data_get();
 }
 
 static void user_main_mode_product_check( void )
 {
-    wrapper_product_check();
+//    wrapper_product_check();
 }
 
 static void user_main_mode_move(void)
