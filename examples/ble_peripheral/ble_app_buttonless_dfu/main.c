@@ -88,6 +88,12 @@
 #include "nrf_log_default_backends.h"
 #include "nrf_bootloader_info.h"
 
+#include "i2c/eeprom.h"
+#include "saadc.h"
+#include "main.h"
+#include "state_manager.h"
+#include "led/led.h"
+
 #define DEVICE_NAME                     "SLeeim2"                         /**< Name of device. Will be included in the advertising data. */
 #define MANUFACTURER_NAME               "NordicSemiconductor"                       /**< Manufacturer. Will be passed to Device Information Service. */
 #define APP_ADV_INTERVAL                300                                         /**< The advertising interval (in units of 0.625 ms. This value corresponds to 187.5 ms). */
@@ -870,6 +876,12 @@ int main(void)
     gpio_init();
 
 //    NRF_LOG_INFO("Buttonless DFU Application started.");
+
+    saadc_init();
+    saadc_sampling_event_init();
+    saadc_sampling_event_enable();
+
+//    i2c_init();
 
     // Start execution.
     application_timers_start();

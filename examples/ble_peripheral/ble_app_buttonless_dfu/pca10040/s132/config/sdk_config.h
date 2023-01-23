@@ -116,6 +116,66 @@
 
 // </e>
 
+//==========================================================
+// <e> NRFX_PPI_ENABLED - nrfx_ppi - PPI peripheral allocator
+//==========================================================
+#ifndef NRFX_PPI_ENABLED
+#define NRFX_PPI_ENABLED 1
+#endif
+// <e> NRFX_PPI_CONFIG_LOG_ENABLED - Enables logging in the module.
+//==========================================================
+#ifndef NRFX_PPI_CONFIG_LOG_ENABLED
+#define NRFX_PPI_CONFIG_LOG_ENABLED 0
+#endif
+// <o> NRFX_PPI_CONFIG_LOG_LEVEL  - Default Severity level
+ 
+// <0=> Off 
+// <1=> Error 
+// <2=> Warning 
+// <3=> Info 
+// <4=> Debug 
+
+#ifndef NRFX_PPI_CONFIG_LOG_LEVEL
+#define NRFX_PPI_CONFIG_LOG_LEVEL 3
+#endif
+
+// <o> NRFX_PPI_CONFIG_INFO_COLOR  - ANSI escape code prefix.
+ 
+// <0=> Default 
+// <1=> Black 
+// <2=> Red 
+// <3=> Green 
+// <4=> Yellow 
+// <5=> Blue 
+// <6=> Magenta 
+// <7=> Cyan 
+// <8=> White 
+
+#ifndef NRFX_PPI_CONFIG_INFO_COLOR
+#define NRFX_PPI_CONFIG_INFO_COLOR 0
+#endif
+
+// <o> NRFX_PPI_CONFIG_DEBUG_COLOR  - ANSI escape code prefix.
+ 
+// <0=> Default 
+// <1=> Black 
+// <2=> Red 
+// <3=> Green 
+// <4=> Yellow 
+// <5=> Blue 
+// <6=> Magenta 
+// <7=> Cyan 
+// <8=> White 
+
+#ifndef NRFX_PPI_CONFIG_DEBUG_COLOR
+#define NRFX_PPI_CONFIG_DEBUG_COLOR 0
+#endif
+
+// </e>
+
+// </e>
+
+
 // <e> PEER_MANAGER_ENABLED - peer_manager - Peer Manager
 //==========================================================
 #ifndef PEER_MANAGER_ENABLED
@@ -2514,6 +2574,56 @@
 
 // </e>
 
+// <e> NRFX_SAADC_ENABLED - nrfx_saadc - SAADC peripheral driver
+//==========================================================
+#ifndef NRFX_SAADC_ENABLED
+#define NRFX_SAADC_ENABLED 1
+#endif
+// <o> NRFX_SAADC_CONFIG_RESOLUTION  - Resolution
+ 
+// <0=> 8 bit 
+// <1=> 10 bit 
+// <2=> 12 bit 
+// <3=> 14 bit 
+#ifndef NRFX_SAADC_CONFIG_RESOLUTION
+#define NRFX_SAADC_CONFIG_RESOLUTION 1
+#endif
+
+// <o> NRFX_SAADC_CONFIG_OVERSAMPLE  - Sample period
+ 
+// <0=> Disabled 
+// <1=> 2x 
+// <2=> 4x 
+// <3=> 8x 
+// <4=> 16x 
+// <5=> 32x 
+// <6=> 64x 
+// <7=> 128x 
+// <8=> 256x 
+#ifndef NRFX_SAADC_CONFIG_OVERSAMPLE
+#define NRFX_SAADC_CONFIG_OVERSAMPLE 0
+#endif
+
+// <q> NRFX_SAADC_CONFIG_LP_MODE  - Enabling low power mode
+#ifndef NRFX_SAADC_CONFIG_LP_MODE
+#define NRFX_SAADC_CONFIG_LP_MODE 0
+#endif
+
+// <o> NRFX_SAADC_CONFIG_IRQ_PRIORITY  - Interrupt priority
+ 
+// <0=> 0 (highest) 
+// <1=> 1 
+// <2=> 2 
+// <3=> 3 
+// <4=> 4 
+// <5=> 5 
+// <6=> 6 
+// <7=> 7 
+
+#ifndef NRFX_SAADC_CONFIG_IRQ_PRIORITY
+#define NRFX_SAADC_CONFIG_IRQ_PRIORITY 6
+#endif
+
 // <e> SAADC_CONFIG_LOG_ENABLED - Enables logging in the module.
 //==========================================================
 #ifndef SAADC_CONFIG_LOG_ENABLED
@@ -2564,6 +2674,152 @@
 #endif
 
 // </e>
+
+// <e> NRFX_TIMER_ENABLED - nrfx_timer - TIMER periperal driver
+//==========================================================
+#ifndef NRFX_TIMER_ENABLED
+#define NRFX_TIMER_ENABLED 1
+#endif
+// <q> NRFX_TIMER0_ENABLED  - Enable TIMER0 instance
+ 
+
+#ifndef NRFX_TIMER0_ENABLED
+#define NRFX_TIMER0_ENABLED 0
+#endif
+
+// <q> NRFX_TIMER1_ENABLED  - Enable TIMER1 instance
+ 
+
+#ifndef NRFX_TIMER1_ENABLED
+#define NRFX_TIMER1_ENABLED 1
+#endif
+
+// <q> NRFX_TIMER2_ENABLED  - Enable TIMER2 instance
+ 
+
+#ifndef NRFX_TIMER2_ENABLED
+#define NRFX_TIMER2_ENABLED 0
+#endif
+
+// <q> NRFX_TIMER3_ENABLED  - Enable TIMER3 instance
+ 
+
+#ifndef NRFX_TIMER3_ENABLED
+#define NRFX_TIMER3_ENABLED 0
+#endif
+
+// <q> NRFX_TIMER4_ENABLED  - Enable TIMER4 instance
+ 
+
+#ifndef NRFX_TIMER4_ENABLED
+#define NRFX_TIMER4_ENABLED 0
+#endif
+
+// <o> NRFX_TIMER_DEFAULT_CONFIG_FREQUENCY  - Timer frequency if in Timer mode
+ 
+// <0=> 16 MHz 
+// <1=> 8 MHz 
+// <2=> 4 MHz 
+// <3=> 2 MHz 
+// <4=> 1 MHz 
+// <5=> 500 kHz 
+// <6=> 250 kHz 
+// <7=> 125 kHz 
+// <8=> 62.5 kHz 
+// <9=> 31.25 kHz 
+
+#ifndef NRFX_TIMER_DEFAULT_CONFIG_FREQUENCY
+#define NRFX_TIMER_DEFAULT_CONFIG_FREQUENCY 0
+#endif
+
+// <o> NRFX_TIMER_DEFAULT_CONFIG_MODE  - Timer mode or operation
+ 
+// <0=> Timer 
+// <1=> Counter 
+
+#ifndef NRFX_TIMER_DEFAULT_CONFIG_MODE
+#define NRFX_TIMER_DEFAULT_CONFIG_MODE 0
+#endif
+
+// <o> NRFX_TIMER_DEFAULT_CONFIG_BIT_WIDTH  - Timer counter bit width
+ 
+// <0=> 16 bit 
+// <1=> 8 bit 
+// <2=> 24 bit 
+// <3=> 32 bit 
+
+#ifndef NRFX_TIMER_DEFAULT_CONFIG_BIT_WIDTH
+#define NRFX_TIMER_DEFAULT_CONFIG_BIT_WIDTH 0
+#endif
+
+// <o> NRFX_TIMER_DEFAULT_CONFIG_IRQ_PRIORITY  - Interrupt priority
+ 
+// <0=> 0 (highest) 
+// <1=> 1 
+// <2=> 2 
+// <3=> 3 
+// <4=> 4 
+// <5=> 5 
+// <6=> 6 
+// <7=> 7 
+
+#ifndef NRFX_TIMER_DEFAULT_CONFIG_IRQ_PRIORITY
+#define NRFX_TIMER_DEFAULT_CONFIG_IRQ_PRIORITY 6
+#endif
+
+// <e> NRFX_TIMER_CONFIG_LOG_ENABLED - Enables logging in the module.
+//==========================================================
+#ifndef NRFX_TIMER_CONFIG_LOG_ENABLED
+#define NRFX_TIMER_CONFIG_LOG_ENABLED 0
+#endif
+// <o> NRFX_TIMER_CONFIG_LOG_LEVEL  - Default Severity level
+ 
+// <0=> Off 
+// <1=> Error 
+// <2=> Warning 
+// <3=> Info 
+// <4=> Debug 
+
+#ifndef NRFX_TIMER_CONFIG_LOG_LEVEL
+#define NRFX_TIMER_CONFIG_LOG_LEVEL 3
+#endif
+
+// <o> NRFX_TIMER_CONFIG_INFO_COLOR  - ANSI escape code prefix.
+ 
+// <0=> Default 
+// <1=> Black 
+// <2=> Red 
+// <3=> Green 
+// <4=> Yellow 
+// <5=> Blue 
+// <6=> Magenta 
+// <7=> Cyan 
+// <8=> White 
+
+#ifndef NRFX_TIMER_CONFIG_INFO_COLOR
+#define NRFX_TIMER_CONFIG_INFO_COLOR 0
+#endif
+
+// <o> NRFX_TIMER_CONFIG_DEBUG_COLOR  - ANSI escape code prefix.
+ 
+// <0=> Default 
+// <1=> Black 
+// <2=> Red 
+// <3=> Green 
+// <4=> Yellow 
+// <5=> Blue 
+// <6=> Magenta 
+// <7=> Cyan 
+// <8=> White 
+
+#ifndef NRFX_TIMER_CONFIG_DEBUG_COLOR
+#define NRFX_TIMER_CONFIG_DEBUG_COLOR 0
+#endif
+
+// </e>
+
+// </e>
+
 
 // <e> SPIS_CONFIG_LOG_ENABLED - Enables logging in the module.
 //==========================================================
@@ -5237,10 +5493,469 @@
 //==========================================================
 
 
+// <h> nrf_cli - Command line interface
+
+//==========================================================
+// <q> NRF_CLI_ENABLED  - Enable/disable the CLI module.
+ 
+
+#ifndef NRF_CLI_ENABLED
+#define NRF_CLI_ENABLED 1
+#endif
+
+// <o> NRF_CLI_ARGC_MAX - Maximum number of parameters passed to the command handler. 
+#ifndef NRF_CLI_ARGC_MAX
+#define NRF_CLI_ARGC_MAX 12
+#endif
+
+// <q> NRF_CLI_BUILD_IN_CMDS_ENABLED  - CLI built-in commands.
+ 
+
+#ifndef NRF_CLI_BUILD_IN_CMDS_ENABLED
+#define NRF_CLI_BUILD_IN_CMDS_ENABLED 1
+#endif
+
+// <o> NRF_CLI_CMD_BUFF_SIZE - Maximum buffer size for a single command. 
+#ifndef NRF_CLI_CMD_BUFF_SIZE
+#define NRF_CLI_CMD_BUFF_SIZE 128
+#endif
+
+// <q> NRF_CLI_ECHO_STATUS  - CLI echo status. If set, echo is ON.
+ 
+
+#ifndef NRF_CLI_ECHO_STATUS
+#define NRF_CLI_ECHO_STATUS 1
+#endif
+
+// <q> NRF_CLI_WILDCARD_ENABLED  - Enable wildcard functionality for CLI commands.
+ 
+
+#ifndef NRF_CLI_WILDCARD_ENABLED
+#define NRF_CLI_WILDCARD_ENABLED 0
+#endif
+
+// <q> NRF_CLI_METAKEYS_ENABLED  - Enable additional control keys for CLI commands like ctrl+a, ctrl+e, ctrl+w, ctrl+u
+ 
+
+#ifndef NRF_CLI_METAKEYS_ENABLED
+#define NRF_CLI_METAKEYS_ENABLED 0
+#endif
+
+// <o> NRF_CLI_PRINTF_BUFF_SIZE - Maximum print buffer size. 
+#ifndef NRF_CLI_PRINTF_BUFF_SIZE
+#define NRF_CLI_PRINTF_BUFF_SIZE 23
+#endif
+
+// <e> NRF_CLI_HISTORY_ENABLED - Enable CLI history mode.
+//==========================================================
+#ifndef NRF_CLI_HISTORY_ENABLED
+#define NRF_CLI_HISTORY_ENABLED 1
+#endif
+// <o> NRF_CLI_HISTORY_ELEMENT_SIZE - Size of one memory object reserved for CLI history. 
+#ifndef NRF_CLI_HISTORY_ELEMENT_SIZE
+#define NRF_CLI_HISTORY_ELEMENT_SIZE 32
+#endif
+
+// <o> NRF_CLI_HISTORY_ELEMENT_COUNT - Number of history memory objects. 
+#ifndef NRF_CLI_HISTORY_ELEMENT_COUNT
+#define NRF_CLI_HISTORY_ELEMENT_COUNT 8
+#endif
+
 // </e>
+
+// <q> NRF_CLI_VT100_COLORS_ENABLED  - CLI VT100 colors.
+ 
+
+#ifndef NRF_CLI_VT100_COLORS_ENABLED
+#define NRF_CLI_VT100_COLORS_ENABLED 1
+#endif
+
+// <q> NRF_CLI_STATISTICS_ENABLED  - Enable CLI statistics.
+ 
+
+#ifndef NRF_CLI_STATISTICS_ENABLED
+#define NRF_CLI_STATISTICS_ENABLED 1
+#endif
+
+// <q> NRF_CLI_LOG_BACKEND  - Enable logger backend interface.
+ 
+
+#ifndef NRF_CLI_LOG_BACKEND
+#define NRF_CLI_LOG_BACKEND 1
+#endif
+
+// <q> NRF_CLI_USES_TASK_MANAGER_ENABLED  - Enable CLI to use task_manager
+ 
+
+#ifndef NRF_CLI_USES_TASK_MANAGER_ENABLED
+#define NRF_CLI_USES_TASK_MANAGER_ENABLED 0
+#endif
 
 // </h> 
 //==========================================================
+// </e>
+
+// <e> NRF_QUEUE_ENABLED - nrf_queue - Queue module
+//==========================================================
+#ifndef NRF_QUEUE_ENABLED
+#define NRF_QUEUE_ENABLED 1
+#endif
+// <q> NRF_QUEUE_CLI_CMDS  - Enable CLI commands specific to the module
+ 
+
+#ifndef NRF_QUEUE_CLI_CMDS
+#define NRF_QUEUE_CLI_CMDS 1
+#endif
+
+// </e>
+// <e> NRF_CLI_BLE_UART_CONFIG_LOG_ENABLED - Enables logging in the module.
+//==========================================================
+#ifndef NRF_CLI_BLE_UART_CONFIG_LOG_ENABLED
+#define NRF_CLI_BLE_UART_CONFIG_LOG_ENABLED 0
+#endif
+// <o> NRF_CLI_BLE_UART_CONFIG_LOG_LEVEL  - Default Severity level
+ 
+// <0=> Off 
+// <1=> Error 
+// <2=> Warning 
+// <3=> Info 
+// <4=> Debug 
+
+#ifndef NRF_CLI_BLE_UART_CONFIG_LOG_LEVEL
+#define NRF_CLI_BLE_UART_CONFIG_LOG_LEVEL 3
+#endif
+
+// <o> NRF_CLI_BLE_UART_CONFIG_INFO_COLOR  - ANSI escape code prefix.
+ 
+// <0=> Default 
+// <1=> Black 
+// <2=> Red 
+// <3=> Green 
+// <4=> Yellow 
+// <5=> Blue 
+// <6=> Magenta 
+// <7=> Cyan 
+// <8=> White 
+
+#ifndef NRF_CLI_BLE_UART_CONFIG_INFO_COLOR
+#define NRF_CLI_BLE_UART_CONFIG_INFO_COLOR 0
+#endif
+
+// <o> NRF_CLI_BLE_UART_CONFIG_DEBUG_COLOR  - ANSI escape code prefix.
+ 
+// <0=> Default 
+// <1=> Black 
+// <2=> Red 
+// <3=> Green 
+// <4=> Yellow 
+// <5=> Blue 
+// <6=> Magenta 
+// <7=> Cyan 
+// <8=> White 
+
+#ifndef NRF_CLI_BLE_UART_CONFIG_DEBUG_COLOR
+#define NRF_CLI_BLE_UART_CONFIG_DEBUG_COLOR 0
+#endif
+
+// </e>
+
+// <e> NRF_CLI_LIBUARTE_CONFIG_LOG_ENABLED - Enables logging in the module.
+//==========================================================
+#ifndef NRF_CLI_LIBUARTE_CONFIG_LOG_ENABLED
+#define NRF_CLI_LIBUARTE_CONFIG_LOG_ENABLED 0
+#endif
+// <o> NRF_CLI_LIBUARTE_CONFIG_LOG_LEVEL  - Default Severity level
+ 
+// <0=> Off 
+// <1=> Error 
+// <2=> Warning 
+// <3=> Info 
+// <4=> Debug 
+
+#ifndef NRF_CLI_LIBUARTE_CONFIG_LOG_LEVEL
+#define NRF_CLI_LIBUARTE_CONFIG_LOG_LEVEL 3
+#endif
+
+// <o> NRF_CLI_LIBUARTE_CONFIG_INFO_COLOR  - ANSI escape code prefix.
+ 
+// <0=> Default 
+// <1=> Black 
+// <2=> Red 
+// <3=> Green 
+// <4=> Yellow 
+// <5=> Blue 
+// <6=> Magenta 
+// <7=> Cyan 
+// <8=> White 
+
+#ifndef NRF_CLI_LIBUARTE_CONFIG_INFO_COLOR
+#define NRF_CLI_LIBUARTE_CONFIG_INFO_COLOR 0
+#endif
+
+// <o> NRF_CLI_LIBUARTE_CONFIG_DEBUG_COLOR  - ANSI escape code prefix.
+ 
+// <0=> Default 
+// <1=> Black 
+// <2=> Red 
+// <3=> Green 
+// <4=> Yellow 
+// <5=> Blue 
+// <6=> Magenta 
+// <7=> Cyan 
+// <8=> White 
+
+#ifndef NRF_CLI_LIBUARTE_CONFIG_DEBUG_COLOR
+#define NRF_CLI_LIBUARTE_CONFIG_DEBUG_COLOR 0
+#endif
+
+// </e>
+
+// <q> NRF_CLI_UART_ENABLED  - nrf_cli_uart - UART command line interface transport
+ 
+
+#ifndef NRF_CLI_UART_ENABLED
+#define NRF_CLI_UART_ENABLED 1
+#endif
+
+// </h> 
+//==========================================================
+
+// <e> NRFX_TWIS_ENABLED - nrfx_twis - TWIS peripheral driver
+//==========================================================
+#ifndef NRFX_TWIS_ENABLED
+#define NRFX_TWIS_ENABLED 1
+#endif
+// <q> NRFX_TWIS0_ENABLED  - Enable TWIS0 instance
+ 
+
+#ifndef NRFX_TWIS0_ENABLED
+#define NRFX_TWIS0_ENABLED 0
+#endif
+
+// <q> NRFX_TWIS1_ENABLED  - Enable TWIS1 instance
+ 
+
+#ifndef NRFX_TWIS1_ENABLED
+#define NRFX_TWIS1_ENABLED 1
+#endif
+
+// <q> NRFX_TWIS_ASSUME_INIT_AFTER_RESET_ONLY  - Assume that any instance would be initialized only once
+ 
+
+// <i> Optimization flag. Registers used by TWIS are shared by other peripherals. Normally, during initialization driver tries to clear all registers to known state before doing the initialization itself. This gives initialization safe procedure, no matter when it would be called. If you activate TWIS only once and do never uninitialize it - set this flag to 1 what gives more optimal code.
+
+#ifndef NRFX_TWIS_ASSUME_INIT_AFTER_RESET_ONLY
+#define NRFX_TWIS_ASSUME_INIT_AFTER_RESET_ONLY 0
+#endif
+
+// <q> NRFX_TWIS_NO_SYNC_MODE  - Remove support for synchronous mode
+ 
+
+// <i> Synchronous mode would be used in specific situations. And it uses some additional code and data memory to safely process state machine by polling it in status functions. If this functionality is not required it may be disabled to free some resources.
+
+#ifndef NRFX_TWIS_NO_SYNC_MODE
+#define NRFX_TWIS_NO_SYNC_MODE 0
+#endif
+
+// <o> NRFX_TWIS_DEFAULT_CONFIG_ADDR0 - Address0 
+#ifndef NRFX_TWIS_DEFAULT_CONFIG_ADDR0
+#define NRFX_TWIS_DEFAULT_CONFIG_ADDR0 0
+#endif
+
+// <o> NRFX_TWIS_DEFAULT_CONFIG_ADDR1 - Address1 
+#ifndef NRFX_TWIS_DEFAULT_CONFIG_ADDR1
+#define NRFX_TWIS_DEFAULT_CONFIG_ADDR1 0
+#endif
+
+// <o> NRFX_TWIS_DEFAULT_CONFIG_SCL_PULL  - SCL pin pull configuration
+ 
+// <0=> Disabled 
+// <1=> Pull down 
+// <3=> Pull up 
+
+#ifndef NRFX_TWIS_DEFAULT_CONFIG_SCL_PULL
+#define NRFX_TWIS_DEFAULT_CONFIG_SCL_PULL 0
+#endif
+
+// <o> NRFX_TWIS_DEFAULT_CONFIG_SDA_PULL  - SDA pin pull configuration
+ 
+// <0=> Disabled 
+// <1=> Pull down 
+// <3=> Pull up 
+
+#ifndef NRFX_TWIS_DEFAULT_CONFIG_SDA_PULL
+#define NRFX_TWIS_DEFAULT_CONFIG_SDA_PULL 0
+#endif
+
+// <o> NRFX_TWIS_DEFAULT_CONFIG_IRQ_PRIORITY  - Interrupt priority
+ 
+// <0=> 0 (highest) 
+// <1=> 1 
+// <2=> 2 
+// <3=> 3 
+// <4=> 4 
+// <5=> 5 
+// <6=> 6 
+// <7=> 7 
+
+#ifndef NRFX_TWIS_DEFAULT_CONFIG_IRQ_PRIORITY
+#define NRFX_TWIS_DEFAULT_CONFIG_IRQ_PRIORITY 6
+#endif
+
+// <e> NRFX_TWIS_CONFIG_LOG_ENABLED - Enables logging in the module.
+//==========================================================
+#ifndef NRFX_TWIS_CONFIG_LOG_ENABLED
+#define NRFX_TWIS_CONFIG_LOG_ENABLED 0
+#endif
+// <o> NRFX_TWIS_CONFIG_LOG_LEVEL  - Default Severity level
+ 
+// <0=> Off 
+// <1=> Error 
+// <2=> Warning 
+// <3=> Info 
+// <4=> Debug 
+
+#ifndef NRFX_TWIS_CONFIG_LOG_LEVEL
+#define NRFX_TWIS_CONFIG_LOG_LEVEL 3
+#endif
+
+// <o> NRFX_TWIS_CONFIG_INFO_COLOR  - ANSI escape code prefix.
+ 
+// <0=> Default 
+// <1=> Black 
+// <2=> Red 
+// <3=> Green 
+// <4=> Yellow 
+// <5=> Blue 
+// <6=> Magenta 
+// <7=> Cyan 
+// <8=> White 
+
+#ifndef NRFX_TWIS_CONFIG_INFO_COLOR
+#define NRFX_TWIS_CONFIG_INFO_COLOR 0
+#endif
+
+// <o> NRFX_TWIS_CONFIG_DEBUG_COLOR  - ANSI escape code prefix.
+ 
+// <0=> Default 
+// <1=> Black 
+// <2=> Red 
+// <3=> Green 
+// <4=> Yellow 
+// <5=> Blue 
+// <6=> Magenta 
+// <7=> Cyan 
+// <8=> White 
+
+#ifndef NRFX_TWIS_CONFIG_DEBUG_COLOR
+#define NRFX_TWIS_CONFIG_DEBUG_COLOR 0
+#endif
+
+// </e>
+
+// </e>
+
+// <e> NRFX_TWI_ENABLED - nrfx_twi - TWI peripheral driver
+//==========================================================
+#ifndef NRFX_TWI_ENABLED
+#define NRFX_TWI_ENABLED 1
+#endif
+// <q> NRFX_TWI0_ENABLED  - Enable TWI0 instance
+ 
+
+#ifndef NRFX_TWI0_ENABLED
+#define NRFX_TWI0_ENABLED 1
+#endif
+
+// <q> NRFX_TWI1_ENABLED  - Enable TWI1 instance
+ 
+
+#ifndef NRFX_TWI1_ENABLED
+#define NRFX_TWI1_ENABLED 0
+#endif
+
+// <o> NRFX_TWI_DEFAULT_CONFIG_FREQUENCY  - Frequency
+ 
+// <26738688=> 100k 
+// <67108864=> 250k 
+// <104857600=> 400k 
+
+#ifndef NRFX_TWI_DEFAULT_CONFIG_FREQUENCY
+#define NRFX_TWI_DEFAULT_CONFIG_FREQUENCY 26738688
+#endif
+
+// <q> NRFX_TWI_DEFAULT_CONFIG_HOLD_BUS_UNINIT  - Enables bus holding after uninit
+ 
+
+#ifndef NRFX_TWI_DEFAULT_CONFIG_HOLD_BUS_UNINIT
+#define NRFX_TWI_DEFAULT_CONFIG_HOLD_BUS_UNINIT 0
+#endif
+
+// <o> NRFX_TWI_DEFAULT_CONFIG_IRQ_PRIORITY  - Interrupt priority
+ 
+// <0=> 0 (highest) 
+// <1=> 1 
+// <2=> 2 
+// <3=> 3 
+// <4=> 4 
+// <5=> 5 
+// <6=> 6 
+// <7=> 7 
+
+#ifndef NRFX_TWI_DEFAULT_CONFIG_IRQ_PRIORITY
+#define NRFX_TWI_DEFAULT_CONFIG_IRQ_PRIORITY 6
+#endif
+
+// <e> NRFX_TWI_CONFIG_LOG_ENABLED - Enables logging in the module.
+//==========================================================
+#ifndef NRFX_TWI_CONFIG_LOG_ENABLED
+#define NRFX_TWI_CONFIG_LOG_ENABLED 0
+#endif
+// <o> NRFX_TWI_CONFIG_LOG_LEVEL  - Default Severity level
+ 
+// <0=> Off 
+// <1=> Error 
+// <2=> Warning 
+// <3=> Info 
+// <4=> Debug 
+
+#ifndef NRFX_TWI_CONFIG_LOG_LEVEL
+#define NRFX_TWI_CONFIG_LOG_LEVEL 3
+#endif
+
+// <o> NRFX_TWI_CONFIG_INFO_COLOR  - ANSI escape code prefix.
+ 
+// <0=> Default 
+// <1=> Black 
+// <2=> Red 
+// <3=> Green 
+// <4=> Yellow 
+// <5=> Blue 
+// <6=> Magenta 
+// <7=> Cyan 
+// <8=> White 
+
+#ifndef NRFX_TWI_CONFIG_INFO_COLOR
+#define NRFX_TWI_CONFIG_INFO_COLOR 0
+#endif
+
+// <o> NRFX_TWI_CONFIG_DEBUG_COLOR  - ANSI escape code prefix.
+ 
+// <0=> Default 
+// <1=> Black 
+// <2=> Red 
+// <3=> Green 
+// <4=> Yellow 
+// <5=> Blue 
+// <6=> Magenta 
+// <7=> Cyan 
+// <8=> White 
+
+#ifndef NRFX_TWI_CONFIG_DEBUG_COLOR
+#define NRFX_TWI_CONFIG_DEBUG_COLOR 0
+#endif
+
+// </e>
 
 // <<< end of configuration section >>>
 #endif //SDK_CONFIG_H
