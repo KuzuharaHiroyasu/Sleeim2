@@ -69,7 +69,7 @@
 #include "ble.h"
 #include "ble_srv_common.h"
 #include "nrf_sdh_ble.h"
-#include "ble_link_ctx_manager.h"
+#include "../../ble_link_ctx_manager/ble_link_ctx_manager.h"
 
 #ifdef __cplusplus
 extern "C" {
