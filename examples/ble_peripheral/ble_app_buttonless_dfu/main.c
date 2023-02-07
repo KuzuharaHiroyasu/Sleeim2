@@ -96,6 +96,7 @@
 
 #include "nrf_cli_ble_uart.h"
 #include "ble_sleeim_service.h"
+#include "nrf_calendar.h"
 
 #define DEVICE_NAME                     "SLeeim2"                         /**< Name of device. Will be included in the advertising data. */
 #define MANUFACTURER_NAME               "NordicSemiconductor"                       /**< Manufacturer. Will be passed to Device Information Service. */
@@ -138,6 +139,7 @@ static void power_management_init(void);
 static void application_timers_start(void);
 static void gpio_init(void);
 static void sw_proc(void);
+static void rtc_init(void);
 
 APP_TIMER_DEF(m_mic_timer_id);  
 APP_TIMER_DEF(m_sw_timer_id);
@@ -146,6 +148,7 @@ APP_TIMER_DEF(m_result_timer_id);
 
 SW  sw = {0};
 
+static bool run_time_updates = false;
 
 uint8_t write_buf[10] = { 0 };
 uint8_t read_buf[10] = { 0 };
@@ -859,6 +862,19 @@ static void idle_state_handle(void)
     }
 }
 
+void print_current_time()
+{
+//    printf("Uncalibrated time:\t%s\r\n", nrf_cal_get_time_string(false));
+    printf("Calibrated time:\t%s\r\n", nrf_cal_get_time_string(true));
+}
+
+void calendar_updated()
+{
+    if(run_time_updates)
+    {
+        print_current_time();
+    }
+}
 
 /**@brief Function for application main entry.
  */
@@ -867,13 +883,13 @@ int main(void)
     bool       erase_bonds;
     ret_code_t err_code;
 
+    rtc_init();
     log_init();
 #if ( DEBUG_BOOTLOADER == 0 )
     // Initialize the async SVCI interface to bootloader before any interrupts are enabled.
     err_code = ble_dfu_buttonless_async_svci_init();
     APP_ERROR_CHECK(err_code);
 #endif
-
     timers_init();
     power_management_init();
     buttons_leds_init(&erase_bonds);
@@ -907,6 +923,7 @@ int main(void)
         nrf_gpio_pin_write(NRF_GPIO_PIN_MAP(0,10), 0); // LED Low
         nrf_delay_ms(500);
 	peripheral_write_notification_test();
+	print_current_time();
 //        idle_state_handle();
     }
 }
@@ -1126,6 +1143,27 @@ void indication_exe(uint8_t * data, uint8_t len)
     ble_sleeim_indication(&m_ble_sleeim, data, len);
 }
 
+void rtc_init(void)
+{
+    uint32_t week, year, month, day, hour, minute, second;
+
+    NRF_CLOCK->EVENTS_HFCLKSTARTED = 0;
+    NRF_CLOCK->TASKS_HFCLKSTART = 1;
+    while(NRF_CLOCK->EVENTS_HFCLKSTARTED == 0);
+    nrf_cal_init();
+    nrf_cal_set_callback(calendar_updated, 4);
+    
+    // default
+    year = 2023;
+    month = 1;
+    week = 0;
+    day = 1;
+    hour = 00;
+    minute = 00;
+    second = 00;
+
+    nrf_cal_set_time(year, month, week, day, hour, minute, second);
+}
 /**
  * @}
  */

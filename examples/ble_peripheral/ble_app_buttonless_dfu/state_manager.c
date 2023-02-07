@@ -4,7 +4,7 @@
 #include <string.h>
 #include "calc_data.h"
 #include "state_manager.h"
-//#include "ble_app.h"
+#include "time.h"
 
 T_UNIT s_unit = {0};
 T_UNIT_SAVE s_unit_save = {0};
@@ -270,10 +270,19 @@ static SYSTEM_MODE evt_demo_vib( int evt)
 
 static void user_main_mode_sensing_before( void )
 {
+    struct tm* time_struct;
     uint32_t	wr_adrs = 0;
     
     // “úî•ñ
+    time_struct = nrf_cal_get_time();
 
+    s_unit.date.year  = time_struct->tm_year;
+    s_unit.date.month = time_struct->tm_mon;
+    s_unit.date.week  = time_struct->tm_wday;
+    s_unit.date.day   = time_struct->tm_mday;
+    s_unit.date.hour  = time_struct->tm_hour;
+    s_unit.date.min   = time_struct->tm_min;
+    s_unit.date.sec   = time_struct->tm_sec;    
 
     // “úî•ñ‘‚«‚İ
     wr_adrs = ( s_unit.frame_num.write * EEP_FRAME_SIZE ) + EEP_ADRS_TOP_FRAME_DATE;

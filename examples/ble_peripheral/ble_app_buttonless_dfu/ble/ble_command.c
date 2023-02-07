@@ -1,6 +1,7 @@
 #include "../saadc.h"
 #include "ble_command.h"
 #include "../state_manager.h"
+#include "time.h"
 
 static void main_ble_rcv_mode_chg( void );
 static void main_ble_rcv_date( void );
@@ -169,38 +170,24 @@ static void main_ble_rcv_mode_chg( void )
 
 static void main_ble_rcv_date( void )
 {
-	uint8_t tx[BLE_DATA_SIZE_MAX] = {0};
-/*	
-	rtc_counter_value_t rtc_val;
-	
-	rtc_val.year = ble_rx_data.rcv_data[1];
-	rtc_val.month = ble_rx_data.rcv_data[2];
-	rtc_val.week = ble_rx_data.rcv_data[3];
-	rtc_val.day = ble_rx_data.rcv_data[4];
-	rtc_val.hour = ble_rx_data.rcv_data[5];
-	rtc_val.min = ble_rx_data.rcv_data[6];
-	rtc_val.sec = ble_rx_data.rcv_data[7];
-	
-	// バイナリ→BCD変換
-	rtc_val.year  = bin2bcd(rtc_val.year);
-	rtc_val.month = bin2bcd(rtc_val.month);
-	rtc_val.week  = bin2bcd(rtc_val.week);
-	rtc_val.day   = bin2bcd(rtc_val.day);
-	rtc_val.hour  = bin2bcd(rtc_val.hour);
-	rtc_val.min   = bin2bcd(rtc_val.min);
-	rtc_val.sec   = bin2bcd(rtc_val.sec);
-	
-	
-	if( MD_OK != R_RTC_Set_CounterValue( rtc_val ) ){
-		err_info( ERR_ID_MAIN );
-	}
-*/	
-	if( get_current_mode() != SYSTEM_MODE_IDLE_COM ){
-		tx[0] = BLE_CMD_DATE_SET;
-		tx[1] = BLE_DATA_RESULT_OK;
-		main_ble_send( &tx[0], BLE_SND_LEN_DATE_SET );
-	}
+    uint8_t tx[BLE_DATA_SIZE_MAX] = {0};
+    uint32_t year, month, week, day, hour, minute, second;
 
+    year   = ble_rx_data.rcv_data[1];
+    month  = ble_rx_data.rcv_data[2];
+    week   = ble_rx_data.rcv_data[3];
+    day    = ble_rx_data.rcv_data[4];
+    hour   = ble_rx_data.rcv_data[5];
+    minute = ble_rx_data.rcv_data[6];
+    second = ble_rx_data.rcv_data[7];
+
+    nrf_cal_set_time(year, month, day, hour, minute, second);
+
+    if( get_current_mode() != SYSTEM_MODE_IDLE_COM ){
+    	tx[0] = BLE_CMD_DATE_SET;
+    	tx[1] = BLE_DATA_RESULT_OK;
+    	main_ble_send( &tx[0], BLE_SND_LEN_DATE_SET );
+    }
 }
 
 static void main_ble_rcv_info( void )
@@ -235,29 +222,14 @@ static void main_ble_rcv_version( void )
 
 static void main_ble_rcv_device_info( void )
 {
+    struct tm* time_struct;
     uint8_t tx[BLE_DATA_SIZE_MAX] = {0};
     uint8_t result = BLE_DATA_RESULT_OK;
-	
-//	rtc_counter_value_t rtc_val;
-//	rtc_counter_value_t rtc_val_bin;
 	
     if( get_current_mode() != SYSTEM_MODE_IDLE_COM ){
 	    result = BLE_DATA_RESULT_NG;
     }
-/*	
-	if( MD_OK != R_RTC_Get_CounterValue( &rtc_val ) ){
-		err_info( ERR_ID_MAIN );
-	}
-	
-	// BCD
-	bcd2bin(&rtc_val_bin.year, &rtc_val.year);
-	bcd2bin(&rtc_val_bin.month, &rtc_val.month);
-	bcd2bin(&rtc_val_bin.week, &rtc_val.week);
-	bcd2bin(&rtc_val_bin.day, &rtc_val.day);
-	bcd2bin(&rtc_val_bin.hour, &rtc_val.hour);
-	bcd2bin(&rtc_val_bin.min, &rtc_val.min);
-	bcd2bin(&rtc_val_bin.sec, &rtc_val.sec);
-*/	
+
     tx[0] = BLE_CMD_DEVICE_INFO;
     tx[1] = result;							// 結果
     tx[2] = bd_device_adrs[0];		// BDデバイスアドレス
@@ -267,15 +239,17 @@ static void main_ble_rcv_device_info( void )
     tx[6] = bd_device_adrs[4];
     tx[7] = bd_device_adrs[5];
     tx[8] = s_unit.frame_num.cnt;
-/*
-	tx[9]  = rtc_val_bin.year;
-	tx[10]  = rtc_val_bin.month;
-	tx[11] = rtc_val_bin.week;
-	tx[12] = rtc_val_bin.day;
-	tx[13] = rtc_val_bin.hour;
-	tx[14] = rtc_val_bin.min;
-	tx[15] = rtc_val_bin.sec;
-*/	
+
+    time_struct = nrf_cal_get_time();
+
+    tx[9]  = time_struct->tm_year;
+    tx[10] = time_struct->tm_mon;
+    tx[11] = time_struct->tm_wday;
+    tx[12] = time_struct->tm_mday;
+    tx[13] = time_struct->tm_hour;
+    tx[14] = time_struct->tm_min;
+    tx[15] = time_struct->tm_sec;
+	
     main_ble_send( &tx[0], BLE_SND_LEN_DEVICE_INFO );
 }
 
