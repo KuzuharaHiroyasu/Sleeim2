@@ -95,6 +95,7 @@
 #include "led/led.h"
 
 #include "nrf_cli_ble_uart.h"
+#include "orange_service.h"
 
 #define DEVICE_NAME                     "SLeeim2"                         /**< Name of device. Will be included in the advertising data. */
 #define MANUFACTURER_NAME               "NordicSemiconductor"                       /**< Manufacturer. Will be passed to Device Information Service. */
@@ -124,7 +125,7 @@
 
 #define DEAD_BEEF                       0xDEADBEEF                                  /**< Value used as error code on stack dump, can be used to identify stack location on stack unwind. */
 
-
+static ble_orange_t m_orange;   
 NRF_BLE_GATT_DEF(m_gatt);                                                           /**< GATT module instance. */
 NRF_BLE_QWR_DEF(m_qwr);                                                             /**< Context for the Queued Write module.*/
 BLE_ADVERTISING_DEF(m_advertising);                                                 /**< Advertising module instance. */
@@ -144,6 +145,17 @@ APP_TIMER_DEF(m_acl_timer_id);
 APP_TIMER_DEF(m_result_timer_id); 
 
 SW  sw = {0};
+
+uint8_t write_buf[10] = { 0 };
+uint16_t write_len;
+uint8_t read_buf[10];
+bool ble_connect_flag;
+uint8_t received_write_data_len;
+bool write_flag;
+bool ble_indicate_ack;
+uint8_t indication_packet_count;
+bool ble_indicate_enable;
+
 // YOUR_JOB: Use UUIDs for service(s) used in your application.
 static ble_uuid_t m_adv_uuids[] = {{BLE_UUID_DEVICE_INFORMATION_SERVICE, BLE_UUID_TYPE_BLE}};
 
@@ -403,7 +415,16 @@ static void nrf_qwr_error_handler(uint32_t nrf_error)
     }
    }*/
 
+static void orange_write_handler(uint16_t conn_handle, ble_orange_t * p_orange, const uint8_t * receive_buf, uint8_t length)
+{
+    uint8_t i;
 
+    for (i = 0; i < length; i++)
+    {
+        write_buf[i] = receive_buf[i];
+    }
+    write_len = length;
+}
 /**@brief Function for initializing services that will be used by the application.
  */
 static void services_init(void)
@@ -411,6 +432,7 @@ static void services_init(void)
     uint32_t                  err_code;
     nrf_ble_qwr_init_t        qwr_init  = {0};
     ble_dfu_buttonless_init_t dfus_init = {0};
+    ble_orange_init_t orange_init;
 
     // Initialize Queued Write Module.
     qwr_init.error_handler = nrf_qwr_error_handler;
@@ -423,6 +445,12 @@ static void services_init(void)
     err_code = ble_dfu_buttonless_init(&dfus_init);
     APP_ERROR_CHECK(err_code);
 
+    // Initialize the Test Service.
+    memset(&orange_init, 0, sizeof(orange_init));
+    orange_init.orange_write_handler = orange_write_handler;
+
+    err_code = ble_orange_init(&m_orange, &orange_init);
+    APP_ERROR_CHECK(err_code);
     /* YOUR_JOB: Add code to initialize the services used by the application.
        uint32_t                           err_code;
        ble_xxs_init_t                     xxs_init;
@@ -560,9 +588,13 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
 {
     uint32_t err_code = NRF_SUCCESS;
 
+    ble_orange_on_ble_evt(p_ble_evt, &m_orange);
+
     switch (p_ble_evt->header.evt_id)
     {
         case BLE_GAP_EVT_DISCONNECTED:
+	    ble_connect_flag = false;
+	    m_conn_handle = BLE_CONN_HANDLE_INVALID;
             // LED indication will be changed when advertising starts.
             break;
 
@@ -572,6 +604,7 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
             m_conn_handle = p_ble_evt->evt.gap_evt.conn_handle;
             err_code = nrf_ble_qwr_conn_handle_assign(&m_qwr, m_conn_handle);
             APP_ERROR_CHECK(err_code);
+	    ble_connect_flag = true;
             break;
 
         case BLE_GAP_EVT_PHY_UPDATE_REQUEST:
@@ -849,7 +882,7 @@ int main(void)
     gatt_init();
     advertising_init();
     services_init();
-    err_code = nrf_cli_ble_uart_service_init();
+//    err_code = nrf_cli_ble_uart_service_init();
     conn_params_init();
     gpio_init();
 
@@ -872,6 +905,7 @@ int main(void)
         nrf_delay_ms(500);
         nrf_gpio_pin_write(NRF_GPIO_PIN_MAP(0,10), 0); // LED Low
         nrf_delay_ms(500);
+	peripheral_write_notification_test();
 //        idle_state_handle();
     }
 }
@@ -1080,6 +1114,17 @@ static void sw_proc(void)
     }
     sw.pow_sw_last = pow_sw;
 }
+
+void notification_exe(uint8_t * data, uint8_t len)
+{
+    ble_orange_notification(&m_orange, data, len);
+}
+
+void indication_exe(uint8_t * data, uint8_t len)
+{
+    ble_orange_indication(&m_orange, data, len);
+}
+
 /**
  * @}
  */

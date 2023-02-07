@@ -73,9 +73,22 @@ typedef struct{
     uint8_t	sw_power_off;
     uint32_t	sw_time_cnt;
 }SW;
+extern uint8_t write_buf[10];
+extern uint16_t write_len;
+
+extern uint8_t read_buf[10];
+extern bool ble_connect_flag;
+extern uint8_t received_write_data_len;
+extern bool write_flag;
+extern bool ble_indicate_ack;
+extern uint8_t indication_packet_count;
+extern bool ble_indicate_enable;
 
 void acl_timers_start(void);
 void acl_timers_stop(void);
 void result_timers_start(void);
 void result_timers_stop(void);
+
+void notification_exe(uint8_t * data, uint8_t len);
+void indication_exe(uint8_t * data, uint8_t len);
 #endif // __MAIN__

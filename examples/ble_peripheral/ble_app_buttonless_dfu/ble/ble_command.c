@@ -118,7 +118,11 @@ void main_ble_proc(uint8_t *p_data, uint8_t len )
 
 void main_ble_send( uint8_t *p_data, uint8_t len )
 {
-    set_ble_rx_res_cmd(p_data, len);
+    for(int i=0; i<len; i++)
+    {
+	write_buf[i] = p_data[i];
+    }    
+//    set_ble_rx_res_cmd(p_data, len);
 }
 /*
 void main_ble_set_mode( void )
@@ -466,10 +470,10 @@ static void main_ble_diag_rcv_led( void )
     if(ble_rx_data.rcv_data[1] == BLE_DATA_DIAG_START)
     {
 	// LED“_“”
-	led_on();
+//	led_on();
     }else{
 	// LEDÁ“”
-	led_off();
+//	led_off();
     }
 
     tx[0] = BLE_CMD_DIAG_LED;
