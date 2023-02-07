@@ -1,12 +1,11 @@
 /**
  ***************************************************************************************************
- * @file        orange_service.c
- * @brief       Set Orange Service
+ * @file        sleeim_service.c
+ * @brief       Set Sleeim Service
  ***************************************************************************************************
  **************************************************************************************************/
 #include "sdk_common.h"
-#ifdef NRF_MODULE_ENABLED(BLE_ORANGE)
-#include "orange_service.h"
+#include "ble_sleeim_service.h"
 #include "ble_srv_common.h"
 #include "../main.h"
 #include "app_error.h"
@@ -21,24 +20,24 @@ static void ble_check_operation(void);
 
 /**@brief Function for handling the Connect event.
  *
- * @param[in]   p_orange       ORANGE Service structure.
+ * @param[in]   p_sleeim       sleeim Service structure.
  * @param[in]   p_ble_evt   Event received from the BLE stack.
  */
-static void on_connect(ble_orange_t * p_orange, ble_evt_t const * p_ble_evt)
+static void on_connect(ble_sleeim_t * p_sleeim, ble_evt_t const * p_ble_evt)
 {
-    p_orange->conn_handle = p_ble_evt->evt.gap_evt.conn_handle;
+    p_sleeim->conn_handle = p_ble_evt->evt.gap_evt.conn_handle;
 }
 
 
 /**@brief Function for handling the Disconnect event.
  *
- * @param[in]   p_orange       SmartLock Service structure.
+ * @param[in]   p_sleeim       SmartLock Service structure.
  * @param[in]   p_ble_evt   Event received from the BLE stack.
  */
-static void on_disconnect(ble_orange_t * p_orange, ble_evt_t const * p_ble_evt)
+static void on_disconnect(ble_sleeim_t * p_sleeim, ble_evt_t const * p_ble_evt)
 {
     UNUSED_PARAMETER(p_ble_evt);
-    p_orange->conn_handle = BLE_CONN_HANDLE_INVALID;
+    p_sleeim->conn_handle = BLE_CONN_HANDLE_INVALID;
 }
 
 
@@ -46,11 +45,11 @@ static void on_disconnect(ble_orange_t * p_orange, ble_evt_t const * p_ble_evt)
  ***************************************************************************************************
  *	@brief			on read function
  *	@details		Function for handling the Read event.
- *      @param[in] p_orange  Orange Service structure.
+ *      @param[in] p_sleeim  Sleeim Service structure.
  *      @param[in] p_ble_evt    Event received from the BLE stack.
  *      @param[in] data         Response data.
  **************************************************************************************************/
-static void on_read(ble_orange_t * p_orange, ble_evt_t const * p_ble_evt, uint8_t* data, uint8_t data_size)
+static void on_read(ble_sleeim_t * p_sleeim, ble_evt_t const * p_ble_evt, uint8_t* data, uint8_t data_size)
 {
     uint32_t err_code;
 
@@ -72,21 +71,21 @@ static void on_read(ble_orange_t * p_orange, ble_evt_t const * p_ble_evt, uint8_
  ***************************************************************************************************
  *	@brief			on write function
  *	@details		Function for handling the Write event.
- *      @param[in] p_orange  Orange Service structure.
+ *      @param[in] p_sleeim  Sleeim Service structure.
  *      @param[in] p_ble_evt    Event received from the BLE stack.
  **************************************************************************************************/
-static void on_write(ble_orange_t * p_orange, ble_evt_t const * p_ble_evt)
+static void on_write(ble_sleeim_t * p_sleeim, ble_evt_t const * p_ble_evt)
 {
     bool result;
     bool analysis_result;
     uint32_t err_code;
     ble_gatts_evt_write_t const * p_evt_write = &p_ble_evt->evt.gatts_evt.params.write;
 	
-    if ((p_evt_write->handle == p_orange->command_trans_handles.value_handle)
+    if ((p_evt_write->handle == p_sleeim->command_trans_handles.value_handle)
         && (p_evt_write->len >= 1)
-        && (p_orange->orange_write_handler != NULL))
+        && (p_sleeim->sleeim_write_handler != NULL))
     {
-        p_orange->orange_write_handler(p_ble_evt->evt.gap_evt.conn_handle, p_orange, &p_evt_write->data[0], p_evt_write->len);
+        p_sleeim->sleeim_write_handler(p_ble_evt->evt.gap_evt.conn_handle, p_sleeim, &p_evt_write->data[0], p_evt_write->len);
 
         received_write_data_len = p_evt_write->len;
         write_flag = true;
@@ -106,10 +105,10 @@ static void on_write(ble_orange_t * p_orange, ble_evt_t const * p_ble_evt)
  ***************************************************************************************************
  *	@brief			on write function
  *	@details		Function for handling the Write event.
- *      @param[in] p_orange  Orange Service structure.
+ *      @param[in] p_sleeim  Sleeim Service structure.
  *      @param[in] p_ble_evt    Event received from the BLE stack.
  **************************************************************************************************/
-static void on_write_res(ble_orange_t * p_orange, ble_evt_t const * p_ble_evt)
+static void on_write_res(ble_sleeim_t * p_sleeim, ble_evt_t const * p_ble_evt)
 {
     bool result;
     bool analysis_result;
@@ -123,16 +122,16 @@ static void on_write_res(ble_orange_t * p_orange, ble_evt_t const * p_ble_evt)
     auth_reply.params.write.offset    = 0;
     auth_reply.params.write.update    = 1;
 
-    if(handle == p_orange->command_trans_handles.value_handle
+    if(handle == p_sleeim->command_trans_handles.value_handle
         && (p_evt_write->len >= 1)
-        && (p_orange->orange_write_handler != NULL))
+        && (p_sleeim->sleeim_write_handler != NULL))
     {
         auth_reply.params.write.gatt_status = BLE_GATT_STATUS_SUCCESS;
         err_code=sd_ble_gatts_rw_authorize_reply(p_ble_evt->evt.gatts_evt.conn_handle,&auth_reply);
         //err_code=sd_ble_gatts_rw_authorize_reply(p_ble_evt->evt.gap_evt.conn_handle, &auth_reply);
         APP_ERROR_CHECK(err_code);
 
-        p_orange->orange_write_handler(p_ble_evt->evt.gatts_evt.conn_handle, p_orange, &p_evt_write->data[0], p_evt_write->len);
+        p_sleeim->sleeim_write_handler(p_ble_evt->evt.gatts_evt.conn_handle, p_sleeim, &p_evt_write->data[0], p_evt_write->len);
         received_write_data_len = p_evt_write->len;
         write_flag = true;
 
@@ -153,36 +152,36 @@ static void on_write_res(ble_orange_t * p_orange, ble_evt_t const * p_ble_evt)
  *	@details		Function for handling the BLE event.
  *      @param[in] p_ble_evt    Event received from the BLE stack.
  **************************************************************************************************/
-void ble_orange_on_ble_evt(ble_evt_t const * p_ble_evt, void * p_context)
+void ble_sleeim_on_ble_evt(ble_evt_t const * p_ble_evt, void * p_context)
 {
     uint32_t err_code;
-    ble_orange_t * p_orange = (ble_orange_t *)p_context;
+    ble_sleeim_t * p_sleeim = (ble_sleeim_t *)p_context;
 
     switch (p_ble_evt->header.evt_id)
     {
         case BLE_GAP_EVT_CONNECTED:
-            on_connect(p_orange, p_ble_evt);
+            on_connect(p_sleeim, p_ble_evt);
             break;
 
         case BLE_GAP_EVT_DISCONNECTED:
-            on_disconnect(p_orange, p_ble_evt);
+            on_disconnect(p_sleeim, p_ble_evt);
             break;
 
         case BLE_GATTS_EVT_WRITE:
-            on_write(p_orange, p_ble_evt);
+            on_write(p_sleeim, p_ble_evt);
             break;
 
         case BLE_GATTS_EVT_RW_AUTHORIZE_REQUEST:
             if ( p_ble_evt->evt.gatts_evt.params.authorize_request.type == BLE_GATTS_AUTHORIZE_TYPE_READ  )
             {
-                if (p_ble_evt->evt.gatts_evt.params.authorize_request.request.read.handle == p_orange->orange_read_handles.value_handle)
+                if (p_ble_evt->evt.gatts_evt.params.authorize_request.request.read.handle == p_sleeim->sleeim_read_handles.value_handle)
                 {
-                    on_read(p_orange, p_ble_evt, &read_buf[0], 10);
+                    on_read(p_sleeim, p_ble_evt, &read_buf[0], 10);
                 }
             }
             else if(p_ble_evt->evt.gatts_evt.params.authorize_request.type == BLE_GATTS_AUTHORIZE_TYPE_WRITE)
             {
-                on_write_res(p_orange, p_ble_evt);
+                on_write_res(p_sleeim, p_ble_evt);
             }
             break;
 
@@ -203,9 +202,9 @@ void ble_orange_on_ble_evt(ble_evt_t const * p_ble_evt, void * p_context)
  ***************************************************************************************************
  *	@brief			LockState Characteristic Setting
  *	@details		Setting LockState Characteristic
- *      @param[in] p_orange  Orange Service structure.
+ *      @param[in] p_sleeim  Sleeim Service structure.
  **************************************************************************************************/
-static uint32_t orange_read_char_add(ble_orange_t * p_orange, const ble_orange_init_t * p_orange_init)
+static uint32_t sleeim_read_char_add(ble_sleeim_t * p_sleeim, const ble_sleeim_init_t * p_sleeim_init)
 {
     ble_gatts_char_md_t char_md;
     ble_gatts_attr_t    attr_char_value;
@@ -224,8 +223,8 @@ static uint32_t orange_read_char_add(ble_orange_t * p_orange, const ble_orange_i
     char_md.p_cccd_md         = NULL;
     char_md.p_sccd_md         = NULL;
     
-    ble_uuid.type = p_orange->uuid_type;
-    ble_uuid.uuid = ORANGE_READ_UUID_CHAR;
+    ble_uuid.type = p_sleeim->uuid_type;
+    ble_uuid.uuid = SLEEIM_READ_UUID_CHAR;
 
     memset(&attr_md, 0, sizeof(attr_md));
 
@@ -246,19 +245,19 @@ static uint32_t orange_read_char_add(ble_orange_t * p_orange, const ble_orange_i
     attr_char_value.max_len   = MAX_READ_NUM;//sizeof(uint8_t);
     attr_char_value.p_value   = NULL;
 
-    return sd_ble_gatts_characteristic_add(p_orange->service_handle, 
+    return sd_ble_gatts_characteristic_add(p_sleeim->service_handle, 
                                                &char_md,
                                                &attr_char_value,
-                                               &p_orange->orange_read_handles);
+                                               &p_sleeim->sleeim_read_handles);
 }
 
 /**
  ***************************************************************************************************
  *	@brief			Write Characteristic Setting
  *	@details		Setting Write Characteristic
- *      @param[in] p_orange  Orange Service structure.
+ *      @param[in] p_sleeim  Sleeim Service structure.
  **************************************************************************************************/
-static uint32_t command_write_char_add(ble_orange_t * p_orange, const ble_orange_init_t * p_orange_init)
+static uint32_t command_write_char_add(ble_sleeim_t * p_sleeim, const ble_sleeim_init_t * p_sleeim_init)
 {
     ble_gatts_char_md_t char_md;
     ble_gatts_attr_t    attr_char_value;
@@ -277,8 +276,8 @@ static uint32_t command_write_char_add(ble_orange_t * p_orange, const ble_orange
     char_md.p_cccd_md         = NULL;
     char_md.p_sccd_md         = NULL;
 
-    ble_uuid.type = p_orange->uuid_type;
-    ble_uuid.uuid = ORANGE_WRITE_UUID_CHAR;
+    ble_uuid.type = p_sleeim->uuid_type;
+    ble_uuid.uuid = SLEEIM_WRITE_UUID_CHAR;
 
     memset(&attr_md, 0, sizeof(attr_md));
 
@@ -298,19 +297,19 @@ static uint32_t command_write_char_add(ble_orange_t * p_orange, const ble_orange
     attr_char_value.max_len   = MAX_WRITE_NUM;//sizeof(uint8_t);
     attr_char_value.p_value   = NULL;
 
-    return sd_ble_gatts_characteristic_add(p_orange->service_handle, 
+    return sd_ble_gatts_characteristic_add(p_sleeim->service_handle, 
                                                &char_md,
                                                &attr_char_value,
-                                               &p_orange->command_trans_handles);
+                                               &p_sleeim->command_trans_handles);
 }
 
 /**
  ***************************************************************************************************
  *	@brief			Indication Characteristic Setting
  *	@details		Setting Indication Characteristic
- *      @param[in] p_orange  Orange Service structure.
+ *      @param[in] p_sleeim  Sleeim Service structure.
  **************************************************************************************************/
-static uint32_t orange_indication_char_add(ble_orange_t * p_orange, const ble_orange_init_t * p_orange_init)
+static uint32_t sleeim_indication_char_add(ble_sleeim_t * p_sleeim, const ble_sleeim_init_t * p_sleeim_init)
 {
     ble_gatts_char_md_t char_md;
     ble_gatts_attr_md_t cccd_md;
@@ -336,8 +335,8 @@ static uint32_t orange_indication_char_add(ble_orange_t * p_orange, const ble_or
     char_md.p_cccd_md         =  &cccd_md;
     char_md.p_sccd_md         = NULL;
 
-    ble_uuid.type = p_orange->uuid_type;
-    ble_uuid.uuid = ORANGE_INDICATION_UUID_CHAR;
+    ble_uuid.type = p_sleeim->uuid_type;
+    ble_uuid.uuid = SLEEIM_INDICATION_UUID_CHAR;
 
     memset(&attr_md, 0, sizeof(attr_md));
 
@@ -357,10 +356,10 @@ static uint32_t orange_indication_char_add(ble_orange_t * p_orange, const ble_or
     attr_char_value.max_len   = MAX_INDICATION_NUM;//sizeof(uint8_t);
     attr_char_value.p_value   = NULL;
 
-    return sd_ble_gatts_characteristic_add(p_orange->service_handle,                       
+    return sd_ble_gatts_characteristic_add(p_sleeim->service_handle,                       
     &char_md,
     &attr_char_value,
-    &p_orange->command_indication_handles);
+    &p_sleeim->command_indication_handles);
 }
 
 
@@ -368,9 +367,9 @@ static uint32_t orange_indication_char_add(ble_orange_t * p_orange, const ble_or
  ***************************************************************************************************
  *	@brief			Notification Characteristic Setting
  *	@details		Setting Notification Characteristic
- *      @param[in] p_orange  Orange Service structure.
+ *      @param[in] p_sleeim  Sleeim Service structure.
  **************************************************************************************************/
-static uint32_t orange_notification_char_add(ble_orange_t * p_orange, const ble_orange_init_t * p_orange_init)
+static uint32_t sleeim_notification_char_add(ble_sleeim_t * p_sleeim, const ble_sleeim_init_t * p_sleeim_init)
 {
     ble_gatts_char_md_t char_md;
     ble_gatts_attr_md_t cccd_md;
@@ -396,8 +395,8 @@ static uint32_t orange_notification_char_add(ble_orange_t * p_orange, const ble_
     char_md.p_cccd_md         =  &cccd_md;
     char_md.p_sccd_md         = NULL;
 
-    ble_uuid.type = p_orange->uuid_type;
-    ble_uuid.uuid = ORANGE_NOTIFICATION_UUID_CHAR;
+    ble_uuid.type = p_sleeim->uuid_type;
+    ble_uuid.uuid = SLEEIM_NOTIFICATION_UUID_CHAR;
 
     memset(&attr_md, 0, sizeof(attr_md));
 
@@ -417,55 +416,55 @@ static uint32_t orange_notification_char_add(ble_orange_t * p_orange, const ble_
     attr_char_value.max_len   = MAX_NOTIFICATION_NUM;//sizeof(uint8_t);
     attr_char_value.p_value   = NULL;
 
-    return sd_ble_gatts_characteristic_add(p_orange->service_handle,                       
+    return sd_ble_gatts_characteristic_add(p_sleeim->service_handle,                       
     &char_md,
     &attr_char_value,
-    &p_orange->command_notification_handles);
+    &p_sleeim->command_notification_handles);
 }
 
 
 /**
  ***************************************************************************************************
- *	@brief			Orange Service initialization
- *	@details		Initializing Orange Service
- *      @param[in] p_orange  Orange Service structure.
+ *	@brief			Sleeim Service initialization
+ *	@details		Initializing Sleeim Service
+ *      @param[in] p_sleeim  Sleeim Service structure.
  **************************************************************************************************/
-uint32_t ble_orange_init(ble_orange_t * p_orange, const ble_orange_init_t * p_orange_init)
+uint32_t ble_sleeim_init(ble_sleeim_t * p_sleeim, const ble_sleeim_init_t * p_sleeim_init)
 {
     uint32_t              err_code;
     ble_uuid_t            ble_uuid;
     ble_add_char_params_t add_char_params;
 
     // Initialize service structure.
-    p_orange->conn_handle       = BLE_CONN_HANDLE_INVALID;
-    p_orange->orange_write_handler = p_orange_init->orange_write_handler;
-    //p_orange->p_orange_state = p_orange_init->p_orange_state;
+    p_sleeim->conn_handle       = BLE_CONN_HANDLE_INVALID;
+    p_sleeim->sleeim_write_handler = p_sleeim_init->sleeim_write_handler;
+    //p_sleeim->p_sleeim_state = p_sleeim_init->p_sleeim_state;
 
     // Add service.
-    ble_uuid128_t base_uuid = {ORANGE_UUID_BASE};
-    err_code = sd_ble_uuid_vs_add(&base_uuid, &p_orange->uuid_type);
+    ble_uuid128_t base_uuid = {SLEEIM_UUID_BASE};
+    err_code = sd_ble_uuid_vs_add(&base_uuid, &p_sleeim->uuid_type);
     VERIFY_SUCCESS(err_code);
 
-    ble_uuid.type = p_orange->uuid_type;
-    ble_uuid.uuid = ORANGE_UUID_SERVICE;
+    ble_uuid.type = p_sleeim->uuid_type;
+    ble_uuid.uuid = SLEEIM_UUID_SERVICE;
 
-    err_code = sd_ble_gatts_service_add(BLE_GATTS_SRVC_TYPE_PRIMARY, &ble_uuid, &p_orange->service_handle);
+    err_code = sd_ble_gatts_service_add(BLE_GATTS_SRVC_TYPE_PRIMARY, &ble_uuid, &p_sleeim->service_handle);
     VERIFY_SUCCESS(err_code);
 
-    // Add Orange Read characteristic
-    err_code = orange_read_char_add(p_orange, p_orange_init);
+    // Add Sleeim Read characteristic
+    err_code = sleeim_read_char_add(p_sleeim, p_sleeim_init);
     VERIFY_SUCCESS(err_code);
 
-    // Add Orange Indication characteristic
-    err_code = orange_indication_char_add(p_orange, p_orange_init);
+    // Add Sleeim Indication characteristic
+    err_code = sleeim_indication_char_add(p_sleeim, p_sleeim_init);
     VERIFY_SUCCESS(err_code);
 
-    // Add Orange Notification characteristic
-    err_code = orange_notification_char_add(p_orange, p_orange_init);
+    // Add Sleeim Notification characteristic
+    err_code = sleeim_notification_char_add(p_sleeim, p_sleeim_init);
     VERIFY_SUCCESS(err_code);
 
-    // Add Lock Orange Write characteristic
-    err_code = command_write_char_add(p_orange, p_orange_init);
+    // Add Lock Sleeim Write characteristic
+    err_code = command_write_char_add(p_sleeim, p_sleeim_init);
     VERIFY_SUCCESS(err_code);
 
     return err_code;
@@ -480,20 +479,20 @@ uint32_t ble_orange_init(ble_orange_t * p_orange, const ble_orange_init_t * p_or
  ***************************************************************************************************
  *	@brief			Notification transmission function
  *	@details		transmission Notification
- *      @param[in] p_orange  Orange Service structure.
+ *      @param[in] p_sleeim  Sleeim Service structure.
  **************************************************************************************************/
-uint32_t ble_orange_notification(ble_orange_t * p_orange, uint8_t *data, uint16_t len)
+uint32_t ble_sleeim_notification(ble_sleeim_t * p_sleeim, uint8_t *data, uint16_t len)
 {
     uint32_t ret;
     ble_gatts_hvx_params_t params;
 
     memset(&params, 0, sizeof(params));
     params.type = BLE_GATT_HVX_NOTIFICATION;
-    params.handle = p_orange->command_notification_handles.value_handle;
+    params.handle = p_sleeim->command_notification_handles.value_handle;
     params.p_data = data;
     params.p_len = &len;
 
-    ret = sd_ble_gatts_hvx(p_orange->conn_handle, &params);
+    ret = sd_ble_gatts_hvx(p_sleeim->conn_handle, &params);
 //    printf("ret = %d ", ret);
     return ret;
 }
@@ -507,19 +506,19 @@ uint32_t ble_orange_notification(ble_orange_t * p_orange, uint8_t *data, uint16_
  ***************************************************************************************************
  *	@brief			Indication transmission function
  *	@details		transmission Indication
- *      @param[in] p_orange  Orange Service structure.
+ *      @param[in] p_sleeim  Sleeim Service structure.
  **************************************************************************************************/
-uint32_t ble_orange_indication(ble_orange_t * p_orange, uint8_t *data, uint16_t len)
+uint32_t ble_sleeim_indication(ble_sleeim_t * p_sleeim, uint8_t *data, uint16_t len)
 {
     ble_gatts_hvx_params_t params;
 
     memset(&params, 0, sizeof(params));
     params.type = BLE_GATT_HVX_INDICATION;
-    params.handle = p_orange->command_indication_handles.value_handle;
+    params.handle = p_sleeim->command_indication_handles.value_handle;
     params.p_data = data;
     params.p_len = &len;
 
-    return sd_ble_gatts_hvx(p_orange->conn_handle, &params);
+    return sd_ble_gatts_hvx(p_sleeim->conn_handle, &params);
 }
 
 /**
@@ -592,5 +591,3 @@ void peripheral_write_indication_test(void)
         indication_exe(&write_buf[0], received_write_data_len);
     }
 }
-
-#endif // NRF_MODULE_ENABLED(BLE_ORANGE)

@@ -110,7 +110,7 @@
       <folder Name="ble">
         <file file_name="../../../ble/ble_command.c" />
         <file file_name="../../../ble/ble_command_tbl.h" />
-        <file file_name="../../../ble/orange_service.c" />
+        <file file_name="../../../ble/ble_sleeim_service.c" />
       </folder>
       <folder Name="calc">
         <folder Name="acl">

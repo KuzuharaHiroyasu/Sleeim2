@@ -95,7 +95,7 @@
 #include "led/led.h"
 
 #include "nrf_cli_ble_uart.h"
-#include "orange_service.h"
+#include "ble_sleeim_service.h"
 
 #define DEVICE_NAME                     "SLeeim2"                         /**< Name of device. Will be included in the advertising data. */
 #define MANUFACTURER_NAME               "NordicSemiconductor"                       /**< Manufacturer. Will be passed to Device Information Service. */
@@ -125,7 +125,7 @@
 
 #define DEAD_BEEF                       0xDEADBEEF                                  /**< Value used as error code on stack dump, can be used to identify stack location on stack unwind. */
 
-static ble_orange_t m_orange;   
+static ble_sleeim_t m_ble_sleeim;   
 NRF_BLE_GATT_DEF(m_gatt);                                                           /**< GATT module instance. */
 NRF_BLE_QWR_DEF(m_qwr);                                                             /**< Context for the Queued Write module.*/
 BLE_ADVERTISING_DEF(m_advertising);                                                 /**< Advertising module instance. */
@@ -146,15 +146,16 @@ APP_TIMER_DEF(m_result_timer_id);
 
 SW  sw = {0};
 
+
 uint8_t write_buf[10] = { 0 };
-uint16_t write_len;
-uint8_t read_buf[10];
+uint8_t read_buf[10] = { 0 };
 bool ble_connect_flag;
-uint8_t received_write_data_len;
 bool write_flag;
 bool ble_indicate_ack;
-uint8_t indication_packet_count;
 bool ble_indicate_enable;
+uint8_t received_write_data_len;
+uint8_t indication_packet_count;
+uint16_t write_len;
 
 // YOUR_JOB: Use UUIDs for service(s) used in your application.
 static ble_uuid_t m_adv_uuids[] = {{BLE_UUID_DEVICE_INFORMATION_SERVICE, BLE_UUID_TYPE_BLE}};
@@ -415,7 +416,7 @@ static void nrf_qwr_error_handler(uint32_t nrf_error)
     }
    }*/
 
-static void orange_write_handler(uint16_t conn_handle, ble_orange_t * p_orange, const uint8_t * receive_buf, uint8_t length)
+static void sleeim_write_handler(uint16_t conn_handle, ble_sleeim_t * p_sleeim, const uint8_t * receive_buf, uint8_t length)
 {
     uint8_t i;
 
@@ -432,7 +433,7 @@ static void services_init(void)
     uint32_t                  err_code;
     nrf_ble_qwr_init_t        qwr_init  = {0};
     ble_dfu_buttonless_init_t dfus_init = {0};
-    ble_orange_init_t orange_init;
+    ble_sleeim_init_t sleeim_init;
 
     // Initialize Queued Write Module.
     qwr_init.error_handler = nrf_qwr_error_handler;
@@ -446,10 +447,10 @@ static void services_init(void)
     APP_ERROR_CHECK(err_code);
 
     // Initialize the Test Service.
-    memset(&orange_init, 0, sizeof(orange_init));
-    orange_init.orange_write_handler = orange_write_handler;
+    memset(&sleeim_init, 0, sizeof(sleeim_init));
+    sleeim_init.sleeim_write_handler = sleeim_write_handler;
 
-    err_code = ble_orange_init(&m_orange, &orange_init);
+    err_code = ble_sleeim_init(&m_ble_sleeim, &sleeim_init);
     APP_ERROR_CHECK(err_code);
     /* YOUR_JOB: Add code to initialize the services used by the application.
        uint32_t                           err_code;
@@ -588,7 +589,7 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
 {
     uint32_t err_code = NRF_SUCCESS;
 
-    ble_orange_on_ble_evt(p_ble_evt, &m_orange);
+    ble_sleeim_on_ble_evt(p_ble_evt, &m_ble_sleeim);
 
     switch (p_ble_evt->header.evt_id)
     {
@@ -1117,12 +1118,12 @@ static void sw_proc(void)
 
 void notification_exe(uint8_t * data, uint8_t len)
 {
-    ble_orange_notification(&m_orange, data, len);
+    ble_sleeim_notification(&m_ble_sleeim, data, len);
 }
 
 void indication_exe(uint8_t * data, uint8_t len)
 {
-    ble_orange_indication(&m_orange, data, len);
+    ble_sleeim_indication(&m_ble_sleeim, data, len);
 }
 
 /**
