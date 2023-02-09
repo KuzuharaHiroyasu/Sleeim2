@@ -32,8 +32,11 @@ NRF_SDH_BLE_OBSERVER(_name ## _obs,                                             
 
 //BASE-UUID:77bfxxxx-b245-d7d5-baaf-7cb4aec8129c
 //BASE-UUID:1e36xxxx-3b3f-405f-9c2f-94c3cd5dacf4
-#define SLEEIM_UUID_BASE {0x9c, 0x12, 0xc8, 0xae, 0xb4, 0x7c, 0xaf, 0xba, \
-                              0xd5, 0xd7, 0x45, 0xb2, 0x00, 0x00, 0xbf, 0x77}
+//#define SLEEIM_UUID_BASE {0x9c, 0x12, 0xc8, 0xae, 0xb4, 0x7c, 0xaf, 0xba, \
+//                              0xd5, 0xd7, 0x45, 0xb2, 0x00, 0x00, 0xbf, 0x77}
+#define SLEEIM_UUID_BASE {0x1B, 0xC5, 0xD5, 0xA5, 0x02, 0x00, 0xB8, 0x8C, \
+                              0xE5, 0x11, 0x1B, 0xA2, 0x00, 0x00, 0x8C, 0xD6}
+
 //
 ////BASE-UUID:4ab4xxxx-65bc-126e-3b8c-8345de91b0d3
 //#define SLEEIM_UUID_BASE {0xd3, 0xb0, 0x91, 0xde, 0x45, 0x83, 0x8c, 0x3b, \
@@ -44,11 +47,11 @@ NRF_SDH_BLE_OBSERVER(_name ## _obs,                                             
 #define BLE_NOTIFICATION_DATA_LENGTH (NRF_SDH_BLE_GATT_MAX_MTU_SIZE-3)
 #define BLE_READ_DATA_LENGTH (32)
 
-#define SLEEIM_UUID_SERVICE               0xABC0
-#define SLEEIM_READ_UUID_CHAR             0xABC1  //Read
-#define SLEEIM_INDICATION_UUID_CHAR       0xABC2  //Indication
-#define SLEEIM_NOTIFICATION_UUID_CHAR     0xABC3  //Notification
-#define SLEEIM_WRITE_UUID_CHAR            0xABC4  //Write
+#define SLEEIM_UUID_SERVICE               0x0001
+#define SLEEIM_READ_UUID_CHAR             0x0005  //Read
+#define SLEEIM_INDICATION_UUID_CHAR       0x0002  //Indication
+#define SLEEIM_NOTIFICATION_UUID_CHAR     0x0004  //Notification
+#define SLEEIM_WRITE_UUID_CHAR            0x0003  //Write
 
 #define	MAX_READ_NUM            BLE_READ_DATA_LENGTH
 #define	MAX_INDICATION_NUM	BLE_INDICATION_DATA_LENGTH

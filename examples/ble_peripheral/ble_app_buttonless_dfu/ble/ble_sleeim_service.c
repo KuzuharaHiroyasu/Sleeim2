@@ -186,6 +186,7 @@ void ble_sleeim_on_ble_evt(ble_evt_t const * p_ble_evt, void * p_context)
             break;
 
         case BLE_GATTS_EVT_HVC:
+//	    printf("BLE_GATTS_EVT_HVC");
             ble_indicate_ack = true;
             indication_packet_count += 1;
             ble_indicate_enable = true;
@@ -510,6 +511,7 @@ uint32_t ble_sleeim_notification(ble_sleeim_t * p_sleeim, uint8_t *data, uint16_
  **************************************************************************************************/
 uint32_t ble_sleeim_indication(ble_sleeim_t * p_sleeim, uint8_t *data, uint16_t len)
 {
+    uint32_t ret;
     ble_gatts_hvx_params_t params;
 
     memset(&params, 0, sizeof(params));
@@ -518,7 +520,9 @@ uint32_t ble_sleeim_indication(ble_sleeim_t * p_sleeim, uint8_t *data, uint16_t 
     params.p_data = data;
     params.p_len = &len;
 
-    return sd_ble_gatts_hvx(p_sleeim->conn_handle, &params);
+    ret = sd_ble_gatts_hvx(p_sleeim->conn_handle, &params);
+//    printf("ret = %d ", ret);
+    return ret;
 }
 
 /**
@@ -583,11 +587,12 @@ void peripheral_write_notification_test(void)
 
 void peripheral_write_indication_test(void)
 {
-    if(true == ble_connect_flag && true == write_flag
-         && true == ble_indicate_enable)
+    if(true == ble_connect_flag && true == write_flag)
+//         && true == ble_indicate_enable)
     {
         write_flag = false;
         ble_indicate_enable = false;
+//	printf("peripheral_write_indication_test");
         indication_exe(&write_buf[0], received_write_data_len);
     }
 }
