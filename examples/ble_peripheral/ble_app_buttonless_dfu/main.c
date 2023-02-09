@@ -140,6 +140,18 @@ static void application_timers_start(void);
 static void gpio_init(void);
 static void sw_proc(void);
 static void rtc_init(void);
+static void gap_params_init(void);
+static void ble_stack_init(void);
+static void ble_stack_init(void);
+static void advertising_init(void);
+static void buttons_leds_init(bool * p_erase_bonds);
+static void services_init(void);
+static void peer_manager_init();
+static void log_init(void);
+static void conn_params_init(void);
+static void gatt_init(void);
+static void print_current_time(void);
+void calendar_updated(void);
 
 APP_TIMER_DEF(m_mic_timer_id);  
 APP_TIMER_DEF(m_sw_timer_id);
@@ -162,6 +174,58 @@ uint16_t write_len;
 
 // YOUR_JOB: Use UUIDs for service(s) used in your application.
 static ble_uuid_t m_adv_uuids[] = {{BLE_UUID_DEVICE_INFORMATION_SERVICE, BLE_UUID_TYPE_BLE}};
+
+/**@brief Function for application main entry.
+ */
+int main(void)
+{
+    bool       erase_bonds;
+    ret_code_t err_code;
+
+//    rtc_init();
+    log_init();
+#if ( DEBUG_BOOTLOADER == 0 )
+    // Initialize the async SVCI interface to bootloader before any interrupts are enabled.
+    err_code = ble_dfu_buttonless_async_svci_init();
+    APP_ERROR_CHECK(err_code);
+#endif
+    timers_init();
+    power_management_init();
+    buttons_leds_init(&erase_bonds);
+    ble_stack_init();
+    peer_manager_init();
+    gap_params_init();
+    gatt_init();
+    advertising_init();
+    services_init();
+//    err_code = nrf_cli_ble_uart_service_init();
+    conn_params_init();
+    gpio_init();
+
+//    NRF_LOG_INFO("Buttonless DFU Application started.");
+
+    saadc_init();
+    saadc_sampling_event_init();
+    saadc_sampling_event_enable();
+
+    i2c_init();
+
+    // Start execution.
+    application_timers_start();
+    advertising_start(erase_bonds);
+
+    // Enter main loop.
+    for (;;)
+    {
+        nrf_gpio_pin_write(NRF_GPIO_PIN_MAP(0,10), 1); // LED High
+        nrf_delay_ms(500);
+        nrf_gpio_pin_write(NRF_GPIO_PIN_MAP(0,10), 0); // LED Low
+        nrf_delay_ms(500);
+	peripheral_write_notification_test();
+	print_current_time();
+//        idle_state_handle();
+    }
+}
 
 /**@brief Handler for shutdown preparation.
  *
@@ -671,7 +735,6 @@ static void ble_stack_init(void)
     NRF_SDH_BLE_OBSERVER(m_ble_observer, APP_BLE_OBSERVER_PRIO, ble_evt_handler, NULL);
 }
 
-
 /**@brief Function for the Peer Manager initialization.
  */
 static void peer_manager_init()
@@ -757,7 +820,6 @@ static void bsp_event_handler(bsp_event_t event)
             break;
     }
 }
-
 
 /**@brief Function for initializing the Advertising functionality.
  */
@@ -859,72 +921,6 @@ static void idle_state_handle(void)
     if (NRF_LOG_PROCESS() == false)
     {
         nrf_pwr_mgmt_run();
-    }
-}
-
-void print_current_time()
-{
-//    printf("Uncalibrated time:\t%s\r\n", nrf_cal_get_time_string(false));
-    printf("Calibrated time:\t%s\r\n", nrf_cal_get_time_string(true));
-}
-
-void calendar_updated()
-{
-    if(run_time_updates)
-    {
-        print_current_time();
-    }
-}
-
-/**@brief Function for application main entry.
- */
-int main(void)
-{
-    bool       erase_bonds;
-    ret_code_t err_code;
-
-    rtc_init();
-    log_init();
-#if ( DEBUG_BOOTLOADER == 0 )
-    // Initialize the async SVCI interface to bootloader before any interrupts are enabled.
-    err_code = ble_dfu_buttonless_async_svci_init();
-    APP_ERROR_CHECK(err_code);
-#endif
-    timers_init();
-    power_management_init();
-    buttons_leds_init(&erase_bonds);
-    ble_stack_init();
-    peer_manager_init();
-    gap_params_init();
-    gatt_init();
-    advertising_init();
-    services_init();
-//    err_code = nrf_cli_ble_uart_service_init();
-    conn_params_init();
-    gpio_init();
-
-//    NRF_LOG_INFO("Buttonless DFU Application started.");
-
-    saadc_init();
-    saadc_sampling_event_init();
-    saadc_sampling_event_enable();
-
-    i2c_init();
-
-    // Start execution.
-    application_timers_start();
-    advertising_start(erase_bonds);
-
-    // Enter main loop.
-    for (;;)
-    {
-        nrf_gpio_pin_write(NRF_GPIO_PIN_MAP(0,10), 1); // LED High
-        nrf_delay_ms(500);
-        nrf_gpio_pin_write(NRF_GPIO_PIN_MAP(0,10), 0); // LED Low
-        nrf_delay_ms(500);
-	peripheral_write_notification_test();
-	print_current_time();
-//        idle_state_handle();
     }
 }
 
@@ -1163,6 +1159,20 @@ void rtc_init(void)
     second = 00;
 
     nrf_cal_set_time(year, month, week, day, hour, minute, second);
+}
+
+static void print_current_time(void)
+{
+//    printf("Uncalibrated time:\t%s\r\n", nrf_cal_get_time_string(false));
+    printf("Calibrated time:\t%s\r\n", nrf_cal_get_time_string(true));
+}
+
+void calendar_updated(void)
+{
+    if(run_time_updates)
+    {
+        print_current_time();
+    }
 }
 /**
  * @}
