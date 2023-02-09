@@ -121,6 +121,10 @@
           <file file_name="../../../calc/breath/calc_snore.c" />
         </folder>
         <file file_name="../../../calc/calc_data.c" />
+        <folder Name="heart_rate">
+          <file file_name="../../../calc/heart_rate/RL78_OB1203.c" />
+          <file file_name="../../../calc/heart_rate/ob1203_bio.c" />
+        </folder>
       </folder>
       <file file_name="../../../main.h" />
       <file file_name="../../../state_manager.c" />
