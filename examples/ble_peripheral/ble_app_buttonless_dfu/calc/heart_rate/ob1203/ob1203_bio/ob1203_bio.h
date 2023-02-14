@@ -2,7 +2,7 @@
 #define OB1203_BIO_OB1203_BIO_H_
 
 #include "r_ob1203_if.h"
-#include "SPO2.h"
+#include "SPO2/SPO2.h"
 
 #define OB1203_BIO_LED_MAX_NUM (2)
 

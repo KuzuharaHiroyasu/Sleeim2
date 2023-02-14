@@ -40,7 +40,15 @@
  #include <stddef.h>
  #include <stdbool.h>
  #include "r_cg_macrodriver.h"
- #include "r_fsp_error.h"
+ #include "../../../inc/r_fsp_error.h"
+
+#if defined(__CCRX__) || defined(__ICCRX__) || defined(__RX__)
+#elif defined(__CCRL__) || defined(__ICCRL78__) || defined(__llvm__) || defined(__RL78__)
+#else
+
+/* Common macro for FSP header files. There is also a corresponding FSP_FOOTER macro at the end of this file. */
+FSP_HEADER
+#endif
 
 /***********************************************************************************************************************
  * Macro definitions
@@ -145,6 +153,14 @@ typedef struct st_rm_comms_instance
     rm_comms_cfg_t const * p_cfg;
     rm_comms_api_t const * p_api;
 } rm_comms_instance_t;
+
+#if defined(__CCRX__) || defined(__ICCRX__) || defined(__RX__)
+#elif defined(__CCRL__) || defined(__ICCRL78__) || defined(__llvm__) || defined(__RL78__)
+#else
+
+/* Common macro for FSP header files. There is also a corresponding FSP_FOOTER macro at the end of this file. */
+FSP_FOOTER
+#endif
 
 #endif                                 /* RM_COMMS_API_H_ */
 

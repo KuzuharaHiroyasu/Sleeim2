@@ -26,8 +26,8 @@
 #define __SPO2_H__
 
 // #include <stdint.h>
- #include "r_cg_macrodriver.h"
- #include <stdbool.h>
+#include "r_cg_macrodriver.h"
+#include <stdbool.h>
 
 /**************ALGORITHM CONFIG OPTIONS***************************/
 #define COMPUTE_RR //DEFINE THIS TO RUN ALG 2.5x MORE OFTEN FOR CALCULATING RESPIRATION RATE (not verified with this undefined in Gen 3 alg (Dec 2021)

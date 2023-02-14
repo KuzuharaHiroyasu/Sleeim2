@@ -4,9 +4,9 @@
  * Please refer to the application note [R36AN0001EU] and OB1203 sensor page (OB1203 - Heart Rate, 
  * Blood Oxygen Concentration, Pulse Oximetry, Proximity, Light and Color Sensor | Renesas)
  ***************************************************************************************************/
-#include "r_comms_i2c_if.h"
+#include "r_comms_i2c_rl/r_comms_i2c_if.h"
 #include "r_ob1203_if.h"
-#include "ob1203_bio.h"
+#include "ob1203_bio/ob1203_bio.h"
 
 typedef enum e_demo_sequence
 {
@@ -25,7 +25,7 @@ typedef enum e_demo_sequence
 } demo_sequence_t;
 
 void g_comms_i2c_bus0_quick_setup(void);
-void start_demo(void);
+void start_heart_rate(void);
 void demo_err(void);
 
 static spo2_t gs_spo2;
@@ -37,8 +37,7 @@ void g_comms_i2c_bus0_quick_setup(void)
     /* bus has been opened by startup process */
 }
 
-void start_demo(void);
-void start_demo(void)
+void start_heart_rate(void)
 {
     bool result;
     rm_ob1203_raw_data_t raw_data;
@@ -60,10 +59,12 @@ void start_demo(void)
     g_comms_i2c_bus0_quick_setup();
 
     /* Open OB1203 Bio extension */
+
     result = ob1203_bio_open(&ob1203_bio,
                              (rm_ob1203_instance_t*)&g_ob1203_sensor0, // Proximity mode
                              (rm_ob1203_instance_t*)&g_ob1203_sensor1,  // PPG mode
                              &gs_spo2);
+
     if (false == result)
     {
         demo_err();

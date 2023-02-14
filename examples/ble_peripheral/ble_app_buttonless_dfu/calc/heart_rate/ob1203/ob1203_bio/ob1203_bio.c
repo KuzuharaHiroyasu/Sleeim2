@@ -88,6 +88,7 @@ bool ob1203_bio_open(ob1203_bio_t *const p_bio,
                      rm_ob1203_instance_t *const p_ppg_instance,
                      spo2_t *const p_spo2)
 {
+
     /* Clear callback flags */
     ob1203_bio_i2c_callback_flag_clear();
 #if OB1203_BIO_IRQ_ENABLE
@@ -1087,7 +1088,7 @@ static void ob1203_bio_i2c_callback_wait(uint32_t const timeout_ms)
         }
 
         /* Delay 1ms */
-        ob1203_bio_delay_ms(1);
+//        ob1203_bio_delay_ms(1);
 
         /* Decrement */
         counter--;

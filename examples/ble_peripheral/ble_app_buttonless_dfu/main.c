@@ -97,6 +97,7 @@
 #include "nrf_cli_ble_uart.h"
 #include "ble_sleeim_service.h"
 #include "nrf_calendar.h"
+#include "RL78_OB1203.h"
 
 #define DEVICE_NAME                     "SLeeim2"                         /**< Name of device. Will be included in the advertising data. */
 #define MANUFACTURER_NAME               "NordicSemiconductor"                       /**< Manufacturer. Will be passed to Device Information Service. */
@@ -918,6 +919,7 @@ int main(void)
     // Enter main loop.
     for (;;)
     {
+	start_heart_rate();
         nrf_gpio_pin_write(NRF_GPIO_PIN_MAP(0,10), 1); // LED High
         nrf_delay_ms(500);
         nrf_gpio_pin_write(NRF_GPIO_PIN_MAP(0,10), 0); // LED Low

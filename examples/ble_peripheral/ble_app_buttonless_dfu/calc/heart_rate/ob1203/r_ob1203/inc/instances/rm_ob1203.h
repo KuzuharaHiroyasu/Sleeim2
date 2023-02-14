@@ -29,7 +29,7 @@
 /***********************************************************************************************************************
  * Includes
  **********************************************************************************************************************/
-#include "rm_ob1203_api.h"
+#include "inc/api/rm_ob1203_api.h"
 #include "r_ob1203_rl_config.h"
 
 /**********************************************************************************************************************
@@ -160,6 +160,14 @@ fsp_err_t RM_OB1203_DeviceInterruptCfgSet(rm_ob1203_ctrl_t * const              
                                           rm_ob1203_device_interrupt_cfg_t const interrupt_cfg);
 fsp_err_t RM_OB1203_FifoInfoGet(rm_ob1203_ctrl_t * const p_api_ctrl, rm_ob1203_fifo_info_t * const p_fifo_info);
 fsp_err_t RM_OB1203_DeviceStatusGet(rm_ob1203_ctrl_t * const p_api_ctrl, rm_ob1203_device_status_t * const p_status);
+
+#if defined(__CCRX__) || defined(__ICCRX__) || defined(__RX__)
+#elif defined(__CCRL__) || defined(__ICCRL78__) || defined(__RL78__)
+#else
+
+/* Common macro for FSP header files. There is also a corresponding FSP_FOOTER macro at the end of this file. */
+FSP_FOOTER
+#endif
 
 #endif                                 /* RM_OB1203_H_*/
 
