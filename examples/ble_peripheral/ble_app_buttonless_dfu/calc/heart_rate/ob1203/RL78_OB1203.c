@@ -26,7 +26,7 @@ typedef enum e_demo_sequence
 
 void g_comms_i2c_bus0_quick_setup(void);
 void start_heart_rate(void);
-void demo_err(void);
+void demo_err(demo_sequence_t sequence);
 
 static spo2_t gs_spo2;
 static volatile ob1203_bio_data_t gs_ob1203_bio_data;
@@ -67,11 +67,11 @@ void start_heart_rate(void)
 
     if (false == result)
     {
-        demo_err();
+        demo_err(sequence);
     }
 
-    while (1)
-    {
+//    while (1)
+//    {
         switch (sequence)
         {
             case DEMO_SEQUENCE_1 :
@@ -80,7 +80,7 @@ void start_heart_rate(void)
                 result = ob1203_bio_operation_mode_init(&ob1203_bio);
                 if (false == result)
                 {
-                    demo_err();
+                    demo_err(sequence);
                 }
 
                 sequence = DEMO_SEQUENCE_2;
@@ -93,7 +93,7 @@ void start_heart_rate(void)
                 result = ob1203_bio_measurement_start(&ob1203_bio);
                 if (false == result)
                 {
-                    demo_err();
+                    demo_err(sequence);
                 }
 
                 sequence = DEMO_SEQUENCE_3;
@@ -106,7 +106,7 @@ void start_heart_rate(void)
                 result = ob1203_bio_measurement_period_wait(&ob1203_bio);
                 if (false == result)
                 {
-                    demo_err();
+                    demo_err(sequence);
                 }
 
                 sequence = DEMO_SEQUENCE_4;
@@ -119,7 +119,7 @@ void start_heart_rate(void)
                 result = ob1203_bio_mode_change_check(&ob1203_bio, &change);
                 if (false == result)
                 {
-                    demo_err();
+                    demo_err(sequence);
                 }
 
                 if (false != change)
@@ -128,7 +128,7 @@ void start_heart_rate(void)
                     result = ob1203_bio_measurement_stop(&ob1203_bio);
                     if (false == result)
                     {
-                        demo_err();
+                        demo_err(sequence);
                     }
 
                     /* Change to another mode */
@@ -148,7 +148,7 @@ void start_heart_rate(void)
                 result = ob1203_bio_ppg_raw_data_read(&ob1203_bio, &raw_data);
                 if (false == result)
                 {
-                    demo_err();
+                    demo_err(sequence);
                 }
 
                 sequence = DEMO_SEQUENCE_6;
@@ -161,7 +161,7 @@ void start_heart_rate(void)
                 result = ob1203_bio_ppg_data_calculate(&ob1203_bio, &raw_data, &ppg_data, &valid);
                 if (false == result)
                 {
-                    demo_err();
+                    demo_err(sequence);
                 }
 
                 if (false != valid)
@@ -175,7 +175,7 @@ void start_heart_rate(void)
                     result = ob1203_bio_mode_change_check(&ob1203_bio, &change);
                     if (false == result)
                     {
-                        demo_err();
+                        demo_err(sequence);
                     }
 
                     if (false != change)
@@ -184,7 +184,7 @@ void start_heart_rate(void)
                         result = ob1203_bio_measurement_stop(&ob1203_bio);
                         if (false == result)
                         {
-                            demo_err();
+                            demo_err(sequence);
                         }
 
                         /* Change to another mode */
@@ -208,7 +208,7 @@ void start_heart_rate(void)
                                                                &update);
                 if (false == result)
                 {
-                    demo_err();
+                    demo_err(sequence);
                 }
 
                 if (false != update)
@@ -217,14 +217,14 @@ void start_heart_rate(void)
                     result = ob1203_bio_measurement_stop(&ob1203_bio);
                     if (false == result)
                     {
-                        demo_err();
+                        demo_err(sequence);
                     }
 
                     /* Reconfigure gain and currents */
                     result = ob1203_bio_gain_currents_reconfigure(&ob1203_bio, &gain_currents);
                     if (false == result)
                     {
-                        demo_err();
+                        demo_err(sequence);
                     }
 
                     sequence = DEMO_SEQUENCE_2;
@@ -242,7 +242,7 @@ void start_heart_rate(void)
                 result = ob1203_bio_algorithm_preparation_check(&ob1203_bio, &ready);
                 if (false == result)
                 {
-                    demo_err();
+                    demo_err(sequence);
                 }
 
                 if (false == ready)
@@ -251,21 +251,21 @@ void start_heart_rate(void)
                     result = ob1203_bio_measurement_stop(&ob1203_bio);
                     if (false == result)
                     {
-                        demo_err();
+                        demo_err(sequence);
                     }
 
                     /* Reset the algorithm */
                     result = ob1203_bio_algorithm_reset(&ob1203_bio);
                     if (false == result)
                     {
-                        demo_err();
+                        demo_err(sequence);
                     }
 
                     /* Clear PPG samples */
                     result = ob1203_bio_samples_clear(&ob1203_bio);
                     if (false == result)
                     {
-                        demo_err();
+                        demo_err(sequence);
                     }
 
                     sequence = DEMO_SEQUENCE_2;
@@ -283,7 +283,7 @@ void start_heart_rate(void)
                 result = ob1203_bio_samples_add(&ob1203_bio, &ppg_data);
                 if (false == result)
                 {
-                    demo_err();
+                    demo_err(sequence);
                 }
 
                 sequence = DEMO_SEQUENCE_10;
@@ -296,7 +296,7 @@ void start_heart_rate(void)
                 result = ob1203_bio_hr_spo2_calculate(&ob1203_bio, (ob1203_bio_data_t *)&gs_ob1203_bio_data);
                 if (false == result)
                 {
-                    demo_err();
+                    demo_err(sequence);
                 }
 
                 sequence = DEMO_SEQUENCE_11;
@@ -310,7 +310,7 @@ void start_heart_rate(void)
                                                  (ob1203_bio_data_t *)&gs_ob1203_bio_data);
                 if (false == result)
                 {
-                    demo_err();
+                    demo_err(sequence);
                 }
 
                 sequence = DEMO_SEQUENCE_12;
@@ -324,7 +324,7 @@ void start_heart_rate(void)
                                                           &valid);
                 if (false == result)
                 {
-                    demo_err();
+                    demo_err(sequence);
                 }
 
                 if (false != valid)
@@ -337,14 +337,14 @@ void start_heart_rate(void)
                     result = ob1203_bio_measurement_stop(&ob1203_bio);
                     if (false == result)
                     {
-                        demo_err();
+                        demo_err(sequence);
                     }
 
                     /* Reset the algorithm */
                     result = ob1203_bio_algorithm_reset(&ob1203_bio);
                     if (false == result)
                     {
-                        demo_err();
+                        demo_err(sequence);
                     }
 
                     sequence = DEMO_SEQUENCE_2;
@@ -354,17 +354,18 @@ void start_heart_rate(void)
 
             default:
             {
-                demo_err();
+                demo_err(sequence);
             }
             break;
         }
-    }
+//    }
 }
 
-void demo_err(void)
+void demo_err(demo_sequence_t sequence)
 {
-    while (1)
-    {
+//    while (1)
+//    {
+	printf("demo_err:%d", sequence);
         // nothing
-    }
+//    }
 }

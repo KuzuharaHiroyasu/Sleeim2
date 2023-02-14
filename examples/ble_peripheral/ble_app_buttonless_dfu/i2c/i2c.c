@@ -5,6 +5,7 @@ static const nrf_drv_twi_t m_twi_master = NRF_DRV_TWI_INSTANCE(MASTER_TWI_INST);
 
 static ret_code_t twi_master_init(void);
 static ret_code_t i2c_read_register(nrf_drv_twi_t twi_instance, uint8_t device_addr, uint8_t register_addr, uint8_t *p_data, uint8_t bytes, bool no_stop);
+static ret_code_t i2c_read_register_sensor(nrf_drv_twi_t twi_instance, uint8_t device_addr, uint8_t *p_data, uint8_t bytes);
 static ret_code_t i2c_write_register(nrf_drv_twi_t twi_instance, uint8_t device_addr, uint8_t *tx_data, uint8_t bytes, bool no_stop);
 
 void i2c_init(void)
@@ -48,6 +49,14 @@ static ret_code_t i2c_read_register(nrf_drv_twi_t twi_instance, uint8_t device_a
     if(err_code != NRF_SUCCESS) {
 	return err_code;
     }
+
+    err_code = nrf_drv_twi_rx(&twi_instance, device_addr, p_data, bytes);
+    return err_code;
+}
+
+static ret_code_t i2c_read_register_sensor(nrf_drv_twi_t twi_instance, uint8_t device_addr, uint8_t *p_data, uint8_t bytes)
+{
+    ret_code_t err_code;
 
     err_code = nrf_drv_twi_rx(&twi_instance, device_addr, p_data, bytes);
     return err_code;
@@ -102,6 +111,17 @@ void i2c_vib_write(void)
 {
 }
 
-void i2c_heart_rate_read(void)
+ret_code_t i2c_heart_rate_read(uint8_t device_addr, uint8_t *rx_data, uint8_t bytes, uint8_t wait)
 {
+    ret_code_t ret;
+
+    ret = i2c_read_register_sensor(m_twi_master, device_addr, rx_data, bytes);
+
+}
+
+ret_code_t i2c_heart_rate_write(uint8_t device_addr, uint8_t *tx_data, uint8_t bytes, uint8_t wait)
+{
+    ret_code_t ret;
+
+    ret = i2c_write_register(m_twi_master, device_addr, tx_data, bytes, wait);
 }

@@ -33,7 +33,7 @@ Includes
 #include "r_cg_serial.h"
 /* Start user code for include. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */
-#include "r_cg_userdefine.h"
+//#include "r_cg_userdefine.h"
 
 /***********************************************************************************************************************
 Pragma directive
@@ -62,32 +62,32 @@ volatile uint16_t  g_iica0_tx_cnt;             /* iica0 send data count */
 ***********************************************************************************************************************/
 void R_IICA0_Create(void)
 {
-    IICA0EN = 1U; /* supply IICA0 clock */
-    IICE0 = 0U; /* disable IICA0 operation */
-    IICAMK0 = 1U; /* disable INTIICA0 interrupt */
-    IICAIF0 = 0U; /* clear INTIICA0 interrupt flag */
-    /* Set INTIICA0 low priority */
-    IICAPR10 = 1U;
-    IICAPR00 = 1U; 
-    /* Set SCLA0, SDAA0 pin */
-    POM1 |= 0x30U;
-    P1 &= 0xCFU;
-    PM1 |= 0x30U;
-    SMC0 = 0U;
-    IICWL0 = _4C_IICA0_IICWL_VALUE;
-    IICWH0 = _55_IICA0_IICWH_VALUE;
-    IICCTL01 |= _01_IICA_fCLK_HALF;
-    SVA0 = _10_IICA0_MASTERADDRESS;
-    STCEN0 = 1U;
-    IICRSV0 = 1U;
-    SPIE0 = 0U;
-    WTIM0 = 1U;
-    ACKE0 = 1U;
-    IICAMK0 = 0U;
-    IICE0 = 1U;
-    LREL0 = 1U;
-    /* Set SCLA0, SDAA0 pin */
-    PM1 &= 0xCFU;
+//    IICA0EN = 1U; /* supply IICA0 clock */
+//    IICE0 = 0U; /* disable IICA0 operation */
+//    IICAMK0 = 1U; /* disable INTIICA0 interrupt */
+//    IICAIF0 = 0U; /* clear INTIICA0 interrupt flag */
+//    /* Set INTIICA0 low priority */
+//    IICAPR10 = 1U;
+//    IICAPR00 = 1U; 
+//    /* Set SCLA0, SDAA0 pin */
+//    POM1 |= 0x30U;
+//    P1 &= 0xCFU;
+//    PM1 |= 0x30U;
+//    SMC0 = 0U;
+//    IICWL0 = _4C_IICA0_IICWL_VALUE;
+//    IICWH0 = _55_IICA0_IICWH_VALUE;
+//    IICCTL01 |= _01_IICA_fCLK_HALF;
+//    SVA0 = _10_IICA0_MASTERADDRESS;
+//    STCEN0 = 1U;
+//    IICRSV0 = 1U;
+//    SPIE0 = 0U;
+//    WTIM0 = 1U;
+//    ACKE0 = 1U;
+//    IICAMK0 = 0U;
+//    IICE0 = 1U;
+//    LREL0 = 1U;
+//    /* Set SCLA0, SDAA0 pin */
+//    PM1 &= 0xCFU;
 }
 
 /***********************************************************************************************************************
@@ -98,7 +98,7 @@ void R_IICA0_Create(void)
 ***********************************************************************************************************************/
 void R_IICA0_Stop(void)
 {
-    IICE0 = 0U;    /* disable IICA0 operation */
+//    IICE0 = 0U;    /* disable IICA0 operation */
 }
 
 /***********************************************************************************************************************
@@ -109,7 +109,7 @@ void R_IICA0_Stop(void)
 ***********************************************************************************************************************/
 void R_IICA0_StopCondition(void)
 {
-    SPT0 = 1U;     /* set stop condition flag */
+//    SPT0 = 1U;     /* set stop condition flag */
 }
 
 /***********************************************************************************************************************
@@ -129,38 +129,38 @@ void R_IICA0_StopCondition(void)
 MD_STATUS R_IICA0_Master_Send(uint8_t adr, uint8_t * const tx_buf, uint16_t tx_num, uint8_t wait)
 {
     MD_STATUS status = MD_OK;
-
-    IICAMK0 = 1U;  /* disable INTIICA0 interrupt */
-    
-    if ((1U == IICBSY0) && (0U == MSTS0))
-    {
-        /* Check bus busy */
-        IICAMK0 = 0U;  /* enable INTIICA0 interrupt */
-        status = MD_ERROR1;
-    }
-    else
-    {
-        STT0 = 1U; /* send IICA0 start condition */
-        IICAMK0 = 0U;  /* enable INTIICA0 interrupt */
-        
-        /* Wait */
-        while (wait--)
-        {
-            ;
-        }
-        
-        if (0U == STD0)
-        {
-            status = MD_ERROR2;
-        }
-		
-        /* Set parameter */
-        g_iica0_tx_cnt = tx_num;
-        gp_iica0_tx_address = tx_buf;
-        g_iica0_master_status_flag = _00_IICA_MASTER_FLAG_CLEAR;
-        adr &= (uint8_t)~0x01U; /* set send mode */
-        IICA0 = adr; /* send address */
-    }
+//
+//    IICAMK0 = 1U;  /* disable INTIICA0 interrupt */
+//    
+//    if ((1U == IICBSY0) && (0U == MSTS0))
+//    {
+//        /* Check bus busy */
+//        IICAMK0 = 0U;  /* enable INTIICA0 interrupt */
+//        status = MD_ERROR1;
+//    }
+//    else
+//    {
+//        STT0 = 1U; /* send IICA0 start condition */
+//        IICAMK0 = 0U;  /* enable INTIICA0 interrupt */
+//        
+//        /* Wait */
+//        while (wait--)
+//        {
+//            ;
+//        }
+//        
+//        if (0U == STD0)
+//        {
+//            status = MD_ERROR2;
+//        }
+//		
+//        /* Set parameter */
+//        g_iica0_tx_cnt = tx_num;
+//        gp_iica0_tx_address = tx_buf;
+//        g_iica0_master_status_flag = _00_IICA_MASTER_FLAG_CLEAR;
+//        adr &= (uint8_t)~0x01U; /* set send mode */
+//        IICA0 = adr; /* send address */
+//    }
 
     return (status);
 }
@@ -182,39 +182,39 @@ MD_STATUS R_IICA0_Master_Send(uint8_t adr, uint8_t * const tx_buf, uint16_t tx_n
 MD_STATUS R_IICA0_Master_Receive(uint8_t adr, uint8_t * const rx_buf, uint16_t rx_num, uint8_t wait)
 {
     MD_STATUS status = MD_OK;
-
-    IICAMK0 = 1U;  /* disable INTIIA0 interrupt */
-    
-    if ((1U == IICBSY0) && (0U == MSTS0))
-    {
-        /* Check bus busy */
-        IICAMK0 = 0U;  /* enable INTIIA0 interrupt */
-        status = MD_ERROR1;
-    }
-    else
-    {
-        STT0 = 1U; /* set IICA0 start condition */
-        IICAMK0 = 0U;  /* enable INTIIA0 interrupt */
-        
-        /* Wait */
-        while (wait--)
-        {
-            ;
-        }
-        
-        if (0U == STD0)
-        {
-            status = MD_ERROR2;
-        }
-		
-        /* Set parameter */
-        g_iica0_rx_len = rx_num;
-        g_iica0_rx_cnt = 0U;
-        gp_iica0_rx_address = rx_buf;
-        g_iica0_master_status_flag  = _00_IICA_MASTER_FLAG_CLEAR;
-        adr |= 0x01U; /* set receive mode */
-        IICA0 = adr; /* receive address */
-    }
+//
+//    IICAMK0 = 1U;  /* disable INTIIA0 interrupt */
+//    
+//    if ((1U == IICBSY0) && (0U == MSTS0))
+//    {
+//        /* Check bus busy */
+//        IICAMK0 = 0U;  /* enable INTIIA0 interrupt */
+//        status = MD_ERROR1;
+//    }
+//    else
+//    {
+//        STT0 = 1U; /* set IICA0 start condition */
+//        IICAMK0 = 0U;  /* enable INTIIA0 interrupt */
+//        
+//        /* Wait */
+//        while (wait--)
+//        {
+//            ;
+//        }
+//        
+//        if (0U == STD0)
+//        {
+//            status = MD_ERROR2;
+//        }
+//		
+//        /* Set parameter */
+//        g_iica0_rx_len = rx_num;
+//        g_iica0_rx_cnt = 0U;
+//        gp_iica0_rx_address = rx_buf;
+//        g_iica0_master_status_flag  = _00_IICA_MASTER_FLAG_CLEAR;
+//        adr |= 0x01U; /* set receive mode */
+//        IICA0 = adr; /* receive address */
+//    }
 
     return (status);
 }
