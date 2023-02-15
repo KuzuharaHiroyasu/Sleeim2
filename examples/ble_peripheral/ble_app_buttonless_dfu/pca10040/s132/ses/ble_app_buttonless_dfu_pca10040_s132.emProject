@@ -171,6 +171,7 @@
       <folder Name="i2c">
         <file file_name="../../../i2c/eeprom.c" />
         <file file_name="../../../i2c/i2c.c" />
+        <file file_name="../../../i2c/vib_ctrl.c" />
       </folder>
       <folder Name="rtc">
         <file file_name="../../../rtc/nrf_calendar.c" />
