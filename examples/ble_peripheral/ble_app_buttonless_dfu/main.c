@@ -575,7 +575,7 @@ static void on_adv_evt(ble_adv_evt_t ble_adv_evt)
             break;
 
         case BLE_ADV_EVT_IDLE:
-            sleep_mode_enter();
+//            sleep_mode_enter();
             break;
 
         default:
@@ -900,11 +900,8 @@ int main(void)
     gatt_init();
     advertising_init();
     services_init();
-//    err_code = nrf_cli_ble_uart_service_init();
     conn_params_init();
     gpio_init();
-
-//    NRF_LOG_INFO("Buttonless DFU Application started.");
 
     saadc_init();
     saadc_sampling_event_init();
@@ -919,7 +916,7 @@ int main(void)
     // Enter main loop.
     for (;;)
     {
-	start_heart_rate();
+//	start_heart_rate();
         nrf_gpio_pin_write(NRF_GPIO_PIN_MAP(0,10), 1); // LED High
         nrf_delay_ms(500);
         nrf_gpio_pin_write(NRF_GPIO_PIN_MAP(0,10), 0); // LED Low
@@ -961,12 +958,14 @@ static void mic_timeout_handler(void * p_context)
     breath_value = get_saadc_value(SAADC_CH_BREATH);
 
     calc_data_set(snore_value, breath_value);
+//    printf("mic_timeout_handler");
 }
 
 static void sw_timeout_handler(void * p_context)
 {
     UNUSED_PARAMETER(p_context);
-
+    
+//    printf("sw_timeout_handler");
     sw_proc();
 
     user_main_mode();
@@ -975,12 +974,14 @@ static void sw_timeout_handler(void * p_context)
 static void acl_timeout_handler(void * p_context)
 {
     UNUSED_PARAMETER(p_context);
-    main_acl_read();
+    printf("acl_timeout_handler");
+//    main_acl_read();
 }
 
 static void result_timeout_handler(void * p_context)
 {
     UNUSED_PARAMETER(p_context);
+    printf("result_timeout_handler");
 }
 
 static void timers_init(void)
@@ -1017,8 +1018,8 @@ static void application_timers_start(void)
        err_code = app_timer_start(m_sw_timer_id, APP_TIMER_TICKS(TIMER_SW_PERIOD), NULL);
        APP_ERROR_CHECK(err_code);
 
-//       err_code = app_timer_start(m_result_timer_id, APP_TIMER_TICKS(TIMER_RESULT_PERIOD), NULL);
-//       APP_ERROR_CHECK(err_code);
+       err_code = app_timer_start(m_result_timer_id, APP_TIMER_TICKS(TIMER_RESULT_PERIOD), NULL);
+       APP_ERROR_CHECK(err_code);
 }
 
 void acl_timers_start(void)
