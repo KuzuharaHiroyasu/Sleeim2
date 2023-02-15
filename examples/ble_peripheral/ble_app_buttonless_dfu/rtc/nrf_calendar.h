@@ -18,7 +18,7 @@
 #include "time.h"
 
 // Change the following defines to change the RTC timer used or the interrupt priority
-#define CAL_RTC                 NRF_RTC1
+#define CAL_RTC                 NRF_RTC2
 #define CAL_RTC_IRQn            RTC0_IRQn
 #define CAL_RTC_IRQHandler      RTC0_IRQHandler
 #define CAL_RTC_IRQ_Priority    3
