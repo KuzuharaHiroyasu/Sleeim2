@@ -20,9 +20,10 @@ static uint32_t m_rtc_increment = 60;
 static void (*cal_event_callback)(void) = 0;
  
 void nrf_cal_init(void)
-{
+{ 
     // Select the 32 kHz crystal and start the 32 kHz clock
-    NRF_CLOCK->LFCLKSRC = CLOCK_LFCLKSRC_SRC_Xtal << CLOCK_LFCLKSRC_SRC_Pos;
+//    NRF_CLOCK->LFCLKSRC = CLOCK_LFCLKSRC_SRC_Xtal << CLOCK_LFCLKSRC_SRC_Pos;
+    NRF_CLOCK->LFCLKSRC = CLOCK_LFCLKSRC_SRC_Synth << CLOCK_LFCLKSRC_SRC_Pos;
     NRF_CLOCK->EVENTS_LFCLKSTARTED = 0;
     NRF_CLOCK->TASKS_LFCLKSTART = 1;
     while(NRF_CLOCK->EVENTS_LFCLKSTARTED == 0);
