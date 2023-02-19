@@ -913,6 +913,7 @@ int main(void)
     application_timers_start();
     advertising_start(erase_bonds);
 
+    err_code =  vib_init();
     // Enter main loop.
     for (;;)
     {

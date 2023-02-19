@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
+#include "bsp_btn_ble.h"
 
 #define DEF_ADDR 0x4A
 #define CHIP_REV 0xBA
@@ -143,4 +144,6 @@ enum REGISTERS {
     IRQ_MASK2,
     SNP_MEM_X
 };
+
+ret_code_t vib_init(void);
 #endif // __VIB_CTRL__
