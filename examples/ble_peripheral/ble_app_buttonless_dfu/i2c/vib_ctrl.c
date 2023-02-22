@@ -100,6 +100,8 @@ ret_code_t vib_init(void)
 
     uint8_t wr_data[2] = {0};
 
+    vib_begin();
+
     wr_data[0] = IRQ_EVENT1;	// 0x03
     wr_data[1] = 0x04;
     ret = i2c_vib_write( DEF_ADDR, &wr_data[0], 2, 0 );
@@ -435,18 +437,37 @@ ret_code_t vib_init(void)
     {
 	return ret;
     }
+    
+    for(int i = 0; i <= 100; i++)
+    {
+        wr_data[0] = SNP_MEM_X + i; // 0x84 + i
+        wr_data[1] = vib_pattern[i];
+        ret = i2c_vib_write( DEF_ADDR, &wr_data[0], 2, 0 );
+	if(ret != NRF_SUCCESS)
+        {
+	    return ret;
+        }
+    }
+
+    wr_data[0] = MEM_CTL2; // 0x83
+    wr_data[1] = 0x00;
+    ret = i2c_vib_write( DEF_ADDR, &wr_data[0], 2, 0 );
+    if(ret != NRF_SUCCESS)
+    {
+	return ret;
+    }
+
+    return ret;
 }
 
 
 
 // Address: 0x00 , bit[7:0]: default value is 0xBA. 
 // Checks the WHOAMI value in the CHIP_REV register.
-/*
-bool Haptic_Driver::begin( TwoWire &wirePort )
+
+bool vib_begin( void )
 {
   
-  delay(2);
-  _i2cPort = &wirePort;
   uint8_t chipRev;
 
   uint8_t tempRegVal = _readRegister(CHIP_REV_REG); 
@@ -459,7 +480,6 @@ bool Haptic_Driver::begin( TwoWire &wirePort )
     return true; 
 
 }
-*/
 // Address: 0x13 , bit[5]: default value is 0x00. 
 // This sets the "actuator" (motor) type, which is either an LRA_MOTOR
 // or is an ERM_MOTOR. 
@@ -487,9 +507,6 @@ bool setOperationMode(uint8_t mode){
     return true; 
   else
     return false; 
-
-  delay(1);
-
 }
 
 // Address: 0x22, bits[2:0]
@@ -1118,6 +1135,18 @@ bool setSeqControl(uint8_t repetitions, uint8_t sequenceID){
 // position.
 bool _writeRegister(uint8_t _wReg, uint8_t _mask, uint8_t _bits, uint8_t _startPosition)
 {
+    uint8_t wr_data[2] = {0};
+    ret_code_t ret = NRF_SUCCESS;
+
+    _mask |= (_bits << _startPosition);
+
+    wr_data[0] = _wReg;
+    wr_data[1] = _mask;
+    ret = i2c_vib_write( DEF_ADDR, &wr_data[0], 2, 0 );
+    if(ret != NRF_SUCCESS)
+    {
+	return false;
+    }
     return true; 
 }
 
@@ -1125,8 +1154,10 @@ bool _writeRegister(uint8_t _wReg, uint8_t _mask, uint8_t _bits, uint8_t _startP
 // address as its' parameter. 
 uint8_t _readRegister(uint8_t _reg)
 {
-    uint8_t _regValue;
-    return _regValue;
+    uint8_t _regValue[2] = {0};
+    i2c_vib_read(DEF_ADDR, _reg, &_regValue[0], 2, 0);
+
+    return _regValue[0];
 }
 
 // Consecutive Write Mode: I2C_WR_MODE = 0
