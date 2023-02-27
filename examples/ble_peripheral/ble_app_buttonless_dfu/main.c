@@ -882,7 +882,7 @@ void calendar_updated()
 int main(void)
 {
     bool       erase_bonds;
-    ret_code_t err_code;
+    ret_code_t err_code = NRF_SUCCESS;
 
     rtc_init();
     log_init();
@@ -909,11 +909,16 @@ int main(void)
 
     i2c_init();
 
+    err_code = vib_init();
+    if(err_code != NRF_SUCCESS)
+    {
+	APP_ERROR_CHECK(err_code);
+    }
+
     // Start execution.
     application_timers_start();
     advertising_start(erase_bonds);
 
-    err_code =  vib_init();
     // Enter main loop.
     for (;;)
     {

@@ -145,11 +145,12 @@ enum REGISTERS {
     SNP_MEM_X
 };
 
-bool vib_begin( void );
 ret_code_t vib_init(void);
-bool setSeqControl(uint8_t repetitions, uint8_t sequenceID);
-uint8_t getOperationMode();
-uint8_t _readRegister(uint8_t _reg);
+bool setVibrate(uint8_t val);
+bool playFromMemory(bool enable);
+bool setOperationMode(uint8_t mode); 
+uint8_t getOperationMode(void); 
+
 uint8_t vib_pattern[100] = 
 {
 0x06,
@@ -160,7 +161,7 @@ uint8_t vib_pattern[100] =
 0x15,
 0x16,
 0x17,
-0x1E,
+0x28,
 0x2F,
 0x27,
 0x29,
@@ -176,13 +177,6 @@ uint8_t vib_pattern[100] =
 0xF0,
 0x07,
 0x19,
-0x01,
-0x02,
-0x00,
-0xE0,
-0x01,
-0x02,
-0x00,
 0x03,
 0x0C,
 0x02,
@@ -200,6 +194,13 @@ uint8_t vib_pattern[100] =
 0x06,
 0x90,
 0x08,
+0x01,
+0x02,
+0x00,
+0xE0,
+0x01,
+0x02,
+0x00,
 0x00,
 0x00,
 0x00,
