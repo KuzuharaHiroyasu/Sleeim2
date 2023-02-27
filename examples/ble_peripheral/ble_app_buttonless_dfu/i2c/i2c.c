@@ -32,14 +32,15 @@ void twi_handler(nrf_drv_twi_evt_t const * p_event, void * p_context)
             {
                 case NRF_DRV_TWI_XFER_TX:
 //                    printf("TWI TX Done.");
+	            m_xfer_done = true;
                     break;
                 case NRF_DRV_TWI_XFER_RX:
 //                    printf("TWI RX Done.");
+	            m_xfer_done = true;
                     break;
                 default:
                     break;
             }
-            m_xfer_done = true;
             break;
 	case NRF_DRV_TWI_EVT_ADDRESS_NACK:
 //	    	printf("NRF_DRV_TWI_EVT_ADDRESS_NACK.");
