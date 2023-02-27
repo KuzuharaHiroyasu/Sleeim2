@@ -915,6 +915,9 @@ int main(void)
 	APP_ERROR_CHECK(err_code);
     }
 
+    main_acl_init();
+    main_acl_start();
+
     // Start execution.
     application_timers_start();
     advertising_start(erase_bonds);
@@ -980,14 +983,14 @@ static void sw_timeout_handler(void * p_context)
 static void acl_timeout_handler(void * p_context)
 {
     UNUSED_PARAMETER(p_context);
-    printf("acl_timeout_handler");
-//    main_acl_read();
+//    printf("acl_timeout_handler");
+    main_acl_read();
 }
 
 static void result_timeout_handler(void * p_context)
 {
     UNUSED_PARAMETER(p_context);
-    printf("result_timeout_handler");
+//    printf("result_timeout_handler");
 }
 
 static void timers_init(void)
@@ -1025,6 +1028,9 @@ static void application_timers_start(void)
        APP_ERROR_CHECK(err_code);
 
        err_code = app_timer_start(m_result_timer_id, APP_TIMER_TICKS(TIMER_RESULT_PERIOD), NULL);
+       APP_ERROR_CHECK(err_code);
+
+       err_code = app_timer_start(m_acl_timer_id, APP_TIMER_TICKS(TIMER_ACL_PERIOD), NULL);
        APP_ERROR_CHECK(err_code);
 }
 
