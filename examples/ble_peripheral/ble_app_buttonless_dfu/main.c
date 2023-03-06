@@ -884,6 +884,7 @@ int main(void)
     bool       erase_bonds;
     ret_code_t err_code = NRF_SUCCESS;
 
+    gpio_init();
     rtc_init();
     log_init();
 #if ( DEBUG_BOOTLOADER == 0 )
@@ -901,7 +902,6 @@ int main(void)
     advertising_init();
     services_init();
     conn_params_init();
-    gpio_init();
 
     saadc_init();
     saadc_sampling_event_init();
