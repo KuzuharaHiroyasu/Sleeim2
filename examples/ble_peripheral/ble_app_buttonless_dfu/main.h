@@ -88,6 +88,7 @@ void acl_timers_start(void);
 void acl_timers_stop(void);
 void result_timers_start(void);
 void result_timers_stop(void);
+uint32_t is_battery_charge(void);
 void led_ctrl(bool ctrl);
 
 void notification_exe(uint8_t * data, uint8_t len);

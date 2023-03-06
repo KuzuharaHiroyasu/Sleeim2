@@ -1076,7 +1076,7 @@ void result_timers_stop(void)
 static void sw_proc(void)
 {
     uint32_t pow_sw;
-    uint8_t bat;
+    uint32_t bat = OFF;
     SYSTEM_MODE	mode = get_current_mode();
 
     pow_sw = nrf_gpio_pin_read(NRF_GPIO_PIN_MAP(0, 6));
@@ -1093,7 +1093,7 @@ static void sw_proc(void)
 	{
 	    if(sw.power_off_timer == TIME_250MS_CNT_POW_OFF_SW_LONG)
 	    { // パワーOFF操作 Step.2: Step.1後0.6秒以内から5秒長押し
-//		bat = drv_i_port_bat_chg_detect();
+		bat = is_battery_charge();
 		if(bat == ON)
 		{
 		    led_ctrl(true);
@@ -1130,7 +1130,7 @@ static void sw_proc(void)
 		// ON確定時にイベント発生済みなのでここでは何もしない
 	    }else if( sw.sw_time_cnt >= TIME_20MS_CNT_POW_SW_SHORT){
 		evt_act( EVENT_POW_SW_SHORT );
-//		bat = drv_i_port_bat_chg_detect();
+		bat = is_battery_charge();
 		if(bat == ON)
 		{
 		    // パワーOFF操作 Step.1:短押し
@@ -1184,6 +1184,11 @@ void rtc_init(void)
     second = 00;
 
     nrf_cal_set_time(year, month, week, day, hour, minute, second);
+}
+
+uint32_t is_battery_charge(void)
+{
+    return nrf_gpio_pin_read(NRF_GPIO_PIN_MAP(0, 18));
 }
 
 void led_ctrl(bool ctrl)
