@@ -141,6 +141,7 @@ static void application_timers_start(void);
 static void gpio_init(void);
 static void sw_proc(void);
 static void rtc_init(void);
+static void power_ctrl(bool ctrl);
 
 APP_TIMER_DEF(m_mic_timer_id);  
 APP_TIMER_DEF(m_sw_timer_id);
@@ -1099,7 +1100,7 @@ static void sw_proc(void)
 	    if(mode == SYSTEM_MODE_INITIAL)
 	    {
 		// INITIAL状態(初回電源ON時)は電源SW長押し確定時に回路ON、LED点灯
-//		write1_sfr(P1, 4, 1);	// 電源ON
+		power_ctrl(true);
 		led_ctrl(true);
 	    }else if(sw.sw_time_cnt == TIME_2000MS_CNT_POW_SW_LONG){
 		sw.power_off_ope_start = OFF;
@@ -1115,7 +1116,7 @@ static void sw_proc(void)
 	    if(sw.sw_power_off == ON)
 	    {
 		sw.sw_power_off = OFF;
-//		write1_sfr(P1, 4, 0);	// 電源OFF
+		power_ctrl(false);
 	    }
 	}
 	
@@ -1186,7 +1187,10 @@ void led_ctrl(bool ctrl)
     nrf_gpio_pin_write(NRF_GPIO_PIN_MAP(0,10), ctrl); // LED 1:High 0:Low
 }
 
-
+static void power_ctrl(bool ctrl)
+{
+    nrf_gpio_pin_write(NRF_GPIO_PIN_MAP(0, 4), ctrl); // POWER 1:High 0:Low
+}
 /**
  * @}
  */
