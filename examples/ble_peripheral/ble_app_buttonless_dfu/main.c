@@ -1071,7 +1071,7 @@ void result_timers_stop(void)
 
 static void sw_proc(void)
 {
-    uint8_t pow_sw;
+    uint32_t pow_sw;
     uint8_t bat;
     SYSTEM_MODE	mode = get_current_mode();
 
