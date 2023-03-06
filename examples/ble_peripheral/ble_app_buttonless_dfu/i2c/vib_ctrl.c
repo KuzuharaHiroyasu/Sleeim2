@@ -360,7 +360,7 @@ ret_code_t vib_init(void)
 	_writeRegister(MEM_CTL2, 0x7F, UNLOCKED, 7);
     }
 
-    for(int i = 0; i <= 100; i++)
+    for(int i = 0; i <= 99; i++)
     {
         wr_data[0] = SNP_MEM_X + i; // 0x84 + i
         wr_data[1] = 0;
@@ -371,7 +371,7 @@ ret_code_t vib_init(void)
         }
     }
 
-    for(int i = 0; i <= 100; i++)
+    for(int i = 0; i <= 99; i++)
     {
         wr_data[0] = SNP_MEM_X + i; // 0x84 + i
         wr_data[1] = vib_pattern[i];
