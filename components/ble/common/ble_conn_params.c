@@ -520,10 +520,12 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
     {
         case BLE_GAP_EVT_CONNECTED:
             on_connect(p_ble_evt);
+	    led_ctrl(true);
             break;
 
         case BLE_GAP_EVT_DISCONNECTED:
             on_disconnect(p_ble_evt);
+	    led_ctrl(false);
             break;
 
         case BLE_GATTS_EVT_WRITE:
