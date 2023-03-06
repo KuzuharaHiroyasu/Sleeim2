@@ -264,7 +264,9 @@ static fsp_err_t rm_ob1203_ppg_measurement_start (rm_ob1203_ctrl_t * const p_api
 
     /* Start measurement */
     main_ctrl_1 = (uint8_t) ((uint8_t) p_ctrl->p_mode->ppg_sensor_mode | RM_OB1203_COMMAND_MEASUREMENT_START);
-    err         = rm_ob1203_main_ctrl_register_write(p_ctrl, 0x00, main_ctrl_1);
+    printf("rm_ob1203_ppg_measurement_start \r\n");
+//    err         = rm_ob1203_main_ctrl_register_write(p_ctrl, 0x00, main_ctrl_1);
+    err = i2c_heart_rate_write(0x16, 0x03, 0);
     FSP_ERROR_RETURN(FSP_SUCCESS == err, err);
 
     return FSP_SUCCESS;
@@ -286,7 +288,10 @@ static fsp_err_t rm_ob1203_ppg_measurement_stop (rm_ob1203_ctrl_t * const p_api_
     p_ctrl->fifo_reset = true;
 
     /* Stop measurement */
-    err = rm_ob1203_main_ctrl_register_write(p_ctrl, 0x00, 0x00);
+	printf("rm_ob1203_ppg_measurement_stop");
+//    err = rm_ob1203_main_ctrl_register_write(p_ctrl, 0x00, 0x00);
+    err = i2c_heart_rate_write(0x15, 0x00, 0);
+    err = i2c_heart_rate_write(0x16, 0x00, 0);
     FSP_ERROR_RETURN(FSP_SUCCESS == err, err);
 
  #if BSP_CFG_RTOS

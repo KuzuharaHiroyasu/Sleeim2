@@ -20,6 +20,6 @@ ret_code_t i2c_acl_write(uint8_t device_addr, uint8_t *tx_data, uint8_t bytes, b
 ret_code_t i2c_vib_read(uint8_t device_addr, uint8_t register_addr, uint8_t *p_data, uint8_t bytes, bool no_stop);
 ret_code_t i2c_vib_write(uint8_t device_addr, uint8_t *tx_data, uint8_t bytes, bool no_stop);
 
-ret_code_t i2c_heart_rate_read(uint8_t device_addr, uint8_t *rx_data, uint8_t bytes, uint8_t wait);
-ret_code_t i2c_heart_rate_write(uint8_t device_addr, uint8_t *tx_data, uint8_t bytes, uint8_t wait);
+ret_code_t i2c_heart_rate_read(uint8_t device_addr, uint8_t register_addr, uint8_t *p_data, uint8_t bytes, bool no_stop);
+ret_code_t i2c_heart_rate_write(uint8_t *tx_data, uint8_t bytes, uint8_t wait);
 #endif // __I2C__

@@ -198,7 +198,10 @@ fsp_err_t RM_OB1203_Open (rm_ob1203_ctrl_t * const p_api_ctrl, rm_ob1203_cfg_t c
     }
 
     /* Stop previous measurements */
-    err = rm_ob1203_main_ctrl_register_write(p_ctrl, 0x00, 0x00);
+	printf("RM_OB1203_Open");
+//    err = rm_ob1203_main_ctrl_register_write(p_ctrl, 0x00, 0x00);
+    err = i2c_heart_rate_write(0x15, 0x00, 0);
+    err = i2c_heart_rate_write(0x16, 0x00, 0);
     FSP_ERROR_RETURN(FSP_SUCCESS == err, err);
 
     /* Software reset */
@@ -774,20 +777,6 @@ fsp_err_t rm_ob1203_read (rm_ob1203_ctrl_t * const p_api_ctrl, rm_comms_write_re
     err = p_ctrl->p_comms_i2c_instance->p_api->writeRead(p_ctrl->p_comms_i2c_instance->p_ctrl, write_read_params);
     FSP_ERROR_RETURN(FSP_SUCCESS == err, err);
 
-    if (RM_OB1203_OPEN != p_ctrl->open)
-    {
-        /* Wait callback */
-        while (false == p_ctrl->init_process_params.communication_finished)
-        {
-            rm_ob1203_delay_ms(p_ctrl, 1);
-            counter++;
-            FSP_ERROR_RETURN(RM_OB1203_TIMEOUT >= counter, FSP_ERR_TIMEOUT);
-        }
-
-        /* Check callback event */
-        FSP_ERROR_RETURN(RM_OB1203_EVENT_SUCCESS == p_ctrl->init_process_params.event, FSP_ERR_ABORTED);
-    }
-
     return FSP_SUCCESS;
 }
 
@@ -814,20 +803,6 @@ fsp_err_t rm_ob1203_write (rm_ob1203_ctrl_t * const p_api_ctrl, uint8_t * const 
     err = p_ctrl->p_comms_i2c_instance->p_api->write(p_ctrl->p_comms_i2c_instance->p_ctrl, p_src, (uint32_t) bytes);
     FSP_ERROR_RETURN(FSP_SUCCESS == err, err);
 
-    if (RM_OB1203_OPEN != p_ctrl->open)
-    {
-        /* Wait callback */
-        while (false == p_ctrl->init_process_params.communication_finished)
-        {
-            rm_ob1203_delay_ms(p_ctrl, 1);
-            counter++;
-            FSP_ERROR_RETURN(RM_OB1203_TIMEOUT >= counter, FSP_ERR_TIMEOUT);
-        }
-
-        /* Check callback event */
-        FSP_ERROR_RETURN(RM_OB1203_EVENT_SUCCESS == p_ctrl->init_process_params.event, FSP_ERR_ABORTED);
-    }
-
     return FSP_SUCCESS;
 }
 
@@ -849,9 +824,15 @@ fsp_err_t rm_ob1203_main_ctrl_register_write (rm_ob1203_ctrl_t * const p_api_ctr
     p_ctrl->buf[0] = RM_OB1203_REG_ADDR_MAIN_CTRL_0;
     p_ctrl->buf[1] = main_ctrl_0;
     p_ctrl->buf[2] = main_ctrl_1;
-
+    
+    if(main_ctrl_0 == 0x00)
+    {
+        printf("rm_ob1203_main_ctrl_register_write main_ctrl_0: 0x%x\r\n", main_ctrl_0);
+    }
     /* Write data */
-    err = rm_ob1203_write(p_ctrl, &p_ctrl->buf[0], 3);
+    err = i2c_heart_rate_write(p_ctrl->buf[0], main_ctrl_0, 0);
+
+//    err = rm_ob1203_write(p_ctrl, &p_ctrl->buf[0], 2);
     FSP_ERROR_RETURN(FSP_SUCCESS == err, err);
 
     return FSP_SUCCESS;
@@ -1154,7 +1135,8 @@ static fsp_err_t rm_ob1203_software_reset (rm_ob1203_ctrl_t * const p_api_ctrl)
     p_ctrl->buf[1] = RM_OB1203_COMMAND_SOFTWARE_RESET;
 
     /* Software reset */
-    err = rm_ob1203_write(p_ctrl, &p_ctrl->buf[0], 2);
+//    err = i2c_heart_rate_write(p_ctrl->buf[0], 0x80, 0);
+//    err = rm_ob1203_write(p_ctrl, &p_ctrl->buf[0], 2);
     FSP_ERROR_RETURN(FSP_SUCCESS == err, err);
 
     return FSP_SUCCESS;

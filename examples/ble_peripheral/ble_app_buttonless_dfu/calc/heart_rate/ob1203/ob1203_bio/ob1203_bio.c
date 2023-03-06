@@ -98,7 +98,7 @@ bool ob1203_bio_open(ob1203_bio_t *const p_bio,
     /* Set parameters */
     p_bio->p_prox_instance = p_prox_instance;
     p_bio->p_ppg_instance = p_ppg_instance;
-    p_bio->mode = RM_OB1203_OPERATION_MODE_PROXIMITY;
+    p_bio->mode = RM_OB1203_OPERATION_MODE_PPG;
     p_bio->mode_change = false;
     p_bio->low_signal_counts = OB1203_BIO_DEFAULT_MAX_LOW_SAMPLES;
     p_bio->p_spo2 = p_spo2;
@@ -238,7 +238,10 @@ bool ob1203_bio_measurement_start(ob1203_bio_t *const p_bio)
         if (FSP_SUCCESS != err)
         {
             return false;
+        }else{
+	    break;
         }
+
         ob1203_bio_i2c_callback_wait(OB1203_BIO_TIMEOUT);
 
         /* Decrement */
@@ -267,7 +270,9 @@ bool ob1203_bio_measurement_stop(ob1203_bio_t *const p_bio)
         if (FSP_SUCCESS != err)
         {
             return false;
-        }
+	}else{
+	    break;
+	}
         ob1203_bio_i2c_callback_wait(OB1203_BIO_TIMEOUT);
 
         /* Decrement */
@@ -327,8 +332,8 @@ bool ob1203_bio_measurement_period_wait(ob1203_bio_t *const p_bio)
             return false;
     }
 
-    do
-    {
+//    do
+//    {
         /* Get Device status */
         counter = OB1203_BIO_MAX_COUNTS;
         do
@@ -339,7 +344,9 @@ bool ob1203_bio_measurement_period_wait(ob1203_bio_t *const p_bio)
             if (FSP_SUCCESS != err)
             {
                 return false;
-            }
+            }else{
+		break;
+	    }
             ob1203_bio_i2c_callback_wait(OB1203_BIO_TIMEOUT);
 
             /* Decrement */
@@ -350,8 +357,8 @@ bool ob1203_bio_measurement_period_wait(ob1203_bio_t *const p_bio)
         {
             return false;
         }
-    }
-    while(false == *p_flag);
+//    }
+//    while(false == *p_flag);
 #endif
 
     return true;
@@ -363,6 +370,10 @@ bool ob1203_bio_ppg_raw_data_read(ob1203_bio_t *const p_bio, rm_ob1203_raw_data_
     uint8_t counter;
     rm_ob1203_fifo_info_t fifo_info;
     uint8_t number_of_samples;
+    uint8_t _regValue[2] = {0};
+    
+    i2c_heart_rate_read(0x53, 0x16, &_regValue[0], 2, 0);
+    printf("_regValue 0x%x \r\n", _regValue[0]);
 
     if (RM_OB1203_PPG_INTERRUPT_TYPE_FIFO_AFULL == p_bio->interrupt_cfg.ppg_type)
     {
@@ -376,7 +387,9 @@ bool ob1203_bio_ppg_raw_data_read(ob1203_bio_t *const p_bio, rm_ob1203_raw_data_
             if (FSP_SUCCESS != err)
             {
                 return false;
-            }
+            }else{
+		break;
+	    }
             ob1203_bio_i2c_callback_wait(OB1203_BIO_TIMEOUT);
 
             /* Decrement */
@@ -433,7 +446,9 @@ bool ob1203_bio_ppg_raw_data_read(ob1203_bio_t *const p_bio, rm_ob1203_raw_data_
             if (FSP_SUCCESS != err)
             {
                 return false;
-            }
+            }else{
+		break;
+	    }
             ob1203_bio_i2c_callback_wait(OB1203_BIO_TIMEOUT);
 
             /* Decrement */
@@ -823,7 +838,9 @@ bool ob1203_bio_gain_currents_reconfigure(ob1203_bio_t *const p_bio, ob1203_bio_
         if (FSP_SUCCESS != err)
         {
             return false;
-        }
+	}else{
+	    break;
+	}
         ob1203_bio_i2c_callback_wait(OB1203_BIO_TIMEOUT);
 
         /* Decrement */
@@ -845,7 +862,9 @@ bool ob1203_bio_gain_currents_reconfigure(ob1203_bio_t *const p_bio, ob1203_bio_
         if (FSP_SUCCESS != err)
         {
             return false;
-        }
+	}else{
+	    break;
+	}
         ob1203_bio_i2c_callback_wait(OB1203_BIO_TIMEOUT);
 
         /* Decrement */
@@ -937,7 +956,8 @@ bool ob1203_bio_mode_change_check(ob1203_bio_t *const p_bio, bool *const p_chang
                 p_bio->mode = RM_OB1203_OPERATION_MODE_PROXIMITY;
                 p_bio->interrupt_cfg.prox_type = RM_OB1203_PROX_INTERRUPT_TYPE_NORMAL;
                 p_bio->interrupt_cfg.persist = OB1203_BIO_PROX_PERSIST;
-                *p_change = true;
+//                *p_change = true;
+                *p_change = false;
             }
         }
         break;

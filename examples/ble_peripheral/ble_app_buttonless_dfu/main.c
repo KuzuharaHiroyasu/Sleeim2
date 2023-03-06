@@ -866,7 +866,7 @@ static void idle_state_handle(void)
 void print_current_time()
 {
 //    printf("Uncalibrated time:\t%s\r\n", nrf_cal_get_time_string(false));
-    printf("Calibrated time:\t%s\r\n", nrf_cal_get_time_string(true));
+//    printf("Calibrated time:\t%s\r\n", nrf_cal_get_time_string(true));
 }
 
 void calendar_updated()
@@ -908,7 +908,7 @@ int main(void)
     saadc_sampling_event_enable();
 
     i2c_init();
-
+/*
     err_code = vib_init();
     if(err_code != NRF_SUCCESS)
     {
@@ -917,15 +917,16 @@ int main(void)
 
     main_acl_init();
     main_acl_start();
-
+*/
     // Start execution.
     application_timers_start();
     advertising_start(erase_bonds);
-
+    
+    heart_rate_init();
     // Enter main loop.
     for (;;)
     {
-//	start_heart_rate();
+	heart_rate_start();
         nrf_gpio_pin_write(NRF_GPIO_PIN_MAP(0,10), 1); // LED High
         nrf_delay_ms(500);
         nrf_gpio_pin_write(NRF_GPIO_PIN_MAP(0,10), 0); // LED Low
@@ -984,7 +985,7 @@ static void acl_timeout_handler(void * p_context)
 {
     UNUSED_PARAMETER(p_context);
 //    printf("acl_timeout_handler");
-    main_acl_read();
+//    main_acl_read();
 }
 
 static void result_timeout_handler(void * p_context)

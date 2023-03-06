@@ -156,13 +156,15 @@ static fsp_err_t rm_ob1203_light_open (rm_ob1203_ctrl_t * const p_api_ctrl, rm_o
     /* Set gain */
     p_ctrl->buf[0] = RM_OB1203_REG_ADDR_LS_GAIN;
     p_ctrl->buf[1] = (uint8_t) p_ctrl->p_mode->light_gain;
-    err            = rm_ob1203_write(p_ctrl, &p_ctrl->buf[0], 2);
+    err = i2c_heart_rate_write(RM_OB1203_REG_ADDR_LS_GAIN, p_ctrl->buf[1], 0);
+//    err            = rm_ob1203_write(p_ctrl, &p_ctrl->buf[0], 2);
     FSP_ERROR_RETURN(FSP_SUCCESS == err, err);
 
     /* Set resolution and measurement period */
     p_ctrl->buf[0] = RM_OB1203_REG_ADDR_LS_RES_PERIOD;
     p_ctrl->buf[1] = (uint8_t) p_ctrl->p_mode->light_resolution_period;
-    err            = rm_ob1203_write(p_ctrl, &p_ctrl->buf[0], 2);
+    err = i2c_heart_rate_write(RM_OB1203_REG_ADDR_LS_RES_PERIOD, p_ctrl->buf[1], 0);
+//    err            = rm_ob1203_write(p_ctrl, &p_ctrl->buf[0], 2);
     FSP_ERROR_RETURN(FSP_SUCCESS == err, err);
 
     /* Set thresholds */
@@ -176,7 +178,8 @@ static fsp_err_t rm_ob1203_light_open (rm_ob1203_ctrl_t * const p_api_ctrl, rm_o
     p_ctrl->buf[5] = (uint8_t) ((threshold_tmp >> 8) & RM_OB1203_MASK_8BITS);
     p_ctrl->buf[6] = (uint8_t) ((threshold_tmp >> 16) & RM_OB1203_MASK_8BITS);
     p_ctrl->buf[7] = (uint8_t) p_ctrl->p_mode->light_variance_threshold;
-    err            = rm_ob1203_write(p_ctrl, &p_ctrl->buf[0], 8);
+    err = i2c_heart_rate_write(RM_OB1203_REG_ADDR_LS_THRES_UP_0, 0x01, 0);
+//    err            = rm_ob1203_write(p_ctrl, &p_ctrl->buf[0], 8);
     FSP_ERROR_RETURN(FSP_SUCCESS == err, err);
 
     /* Set device interrupt configurations */
@@ -230,7 +233,10 @@ static fsp_err_t rm_ob1203_light_measurement_start (rm_ob1203_ctrl_t * const p_a
     main_ctrl_0 =
         (uint8_t) ((uint8_t) p_ctrl->p_mode->light_sleep | (uint8_t) p_ctrl->p_mode->light_sensor_mode |
                    RM_OB1203_COMMAND_MEASUREMENT_START);
-    err = rm_ob1203_main_ctrl_register_write(p_ctrl, main_ctrl_0, 0x00);
+//    main_ctrl_0 = 0x11;
+	printf("rm_ob1203_light_measurement_start");
+//    err = rm_ob1203_main_ctrl_register_write(p_ctrl, main_ctrl_0, 0x00);
+    err = i2c_heart_rate_write(0x15, main_ctrl_0, 0);
     FSP_ERROR_RETURN(FSP_SUCCESS == err, err);
 
     return FSP_SUCCESS;
@@ -255,7 +261,10 @@ static fsp_err_t rm_ob1203_light_measurement_stop (rm_ob1203_ctrl_t * const p_ap
     }
 
     /* Stop measurement */
-    err = rm_ob1203_main_ctrl_register_write(p_ctrl, 0x00, 0x00);
+	printf("rm_ob1203_light_measurement_stop");
+//    err = rm_ob1203_main_ctrl_register_write(p_ctrl, 0x00, 0x00);
+    err = i2c_heart_rate_write(0x15, 0x00, 0);
+    err = i2c_heart_rate_write(0x16, 0x00, 0);
     FSP_ERROR_RETURN(FSP_SUCCESS == err, err);
 
  #if BSP_CFG_RTOS
