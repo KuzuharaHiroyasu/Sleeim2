@@ -191,9 +191,9 @@ static SYSTEM_MODE evt_sensing_chg( int evt)
 	playFromMemory(true);
 
 	user_main_mode_sensing_before();
-/*
-	uint8_t bat = drv_i_port_bat_chg_detect();
-	
+
+	uint32_t bat = is_battery_charge();
+/*	
 	//電池残量確認
 	main_set_battery();
 	
