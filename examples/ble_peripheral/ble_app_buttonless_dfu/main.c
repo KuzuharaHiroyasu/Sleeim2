@@ -885,7 +885,7 @@ int main(void)
     ret_code_t err_code = NRF_SUCCESS;
 
     rtc_init();
-//    log_init();
+    log_init();
 #if ( DEBUG_BOOTLOADER == 0 )
     // Initialize the async SVCI interface to bootloader before any interrupts are enabled.
     err_code = ble_dfu_buttonless_async_svci_init();
