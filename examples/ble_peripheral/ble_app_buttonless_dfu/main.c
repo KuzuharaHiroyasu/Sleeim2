@@ -885,7 +885,7 @@ int main(void)
     ret_code_t err_code = NRF_SUCCESS;
 
     rtc_init();
-    log_init();
+//    log_init();
 #if ( DEBUG_BOOTLOADER == 0 )
     // Initialize the async SVCI interface to bootloader before any interrupts are enabled.
     err_code = ble_dfu_buttonless_async_svci_init();
@@ -944,7 +944,7 @@ static void gpio_init(void)
     nrf_gpio_cfg_input(NRF_GPIO_PIN_MAP(0, 2), NRF_GPIO_PIN_PULLUP); // ADC入力（イビキ）
     nrf_gpio_cfg_input(NRF_GPIO_PIN_MAP(0, 3), NRF_GPIO_PIN_PULLUP); // ADC入力（心拍）
     nrf_gpio_cfg_input(NRF_GPIO_PIN_MAP(0, 5), NRF_GPIO_PIN_PULLUP); // ADC入力（電池）
-    nrf_gpio_cfg_input(NRF_GPIO_PIN_MAP(0, 6), NRF_GPIO_PIN_PULLUP); // SW入力
+    nrf_gpio_cfg_input(NRF_GPIO_PIN_MAP(0, 6), NRF_GPIO_PIN_PULLDOWN); // SW入力
     nrf_gpio_cfg_input(NRF_GPIO_PIN_MAP(0, 9), NRF_GPIO_PIN_PULLUP); // 空き
     nrf_gpio_cfg_input(NRF_GPIO_PIN_MAP(0, 18), NRF_GPIO_PIN_PULLUP); // 充電
     nrf_gpio_cfg_input(NRF_GPIO_PIN_MAP(0, 20), NRF_GPIO_PIN_PULLUP); // 空き
@@ -1073,7 +1073,7 @@ static void sw_proc(void)
     uint8_t bat;
     SYSTEM_MODE	mode = get_current_mode();
 
-//    pow_sw = 
+    pow_sw = nrf_gpio_pin_read(NRF_GPIO_PIN_MAP(0, 6));
 	
     if(sw.power_off_ope_start == ON)
     {
