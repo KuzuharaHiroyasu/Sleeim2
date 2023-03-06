@@ -956,6 +956,10 @@ static void gpio_init(void)
     // output
     nrf_gpio_cfg_output(NRF_GPIO_PIN_MAP(0, 4)); // ìdåπêßå‰
     nrf_gpio_cfg_output(NRF_GPIO_PIN_MAP(0,10)); // LED
+
+    // init
+    nrf_gpio_pin_write(NRF_GPIO_PIN_MAP(0, 4), 0);
+    nrf_gpio_pin_write(NRF_GPIO_PIN_MAP(0,10), 0);
 }
 
 static void mic_timeout_handler(void * p_context)
