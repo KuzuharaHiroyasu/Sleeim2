@@ -926,9 +926,9 @@ int main(void)
     for (;;)
     {
 //	start_heart_rate();
-        nrf_gpio_pin_write(NRF_GPIO_PIN_MAP(0,10), 1); // LED High
+//        nrf_gpio_pin_write(NRF_GPIO_PIN_MAP(0,10), 1); // LED High
         nrf_delay_ms(500);
-        nrf_gpio_pin_write(NRF_GPIO_PIN_MAP(0,10), 0); // LED Low
+//        nrf_gpio_pin_write(NRF_GPIO_PIN_MAP(0,10), 0); // LED Low
         nrf_delay_ms(500);
 	peripheral_write_notification_test();
 	print_current_time();
@@ -1090,7 +1090,7 @@ static void sw_proc(void)
 //		bat = drv_i_port_bat_chg_detect();
 		if(bat == ON)
 		{
-//		    led_green_on();
+		    led_ctrl(true);
 		    sw.sw_power_off = ON;
 		}
 	    }
@@ -1099,7 +1099,7 @@ static void sw_proc(void)
 	    {
 		// INITIAL状態(初回電源ON時)は電源SW長押し確定時に回路ON、LED点灯
 //		write1_sfr(P1, 4, 1);	// 電源ON
-//		led_green_on();
+		led_ctrl(true);
 	    }else if(sw.sw_time_cnt == TIME_2000MS_CNT_POW_SW_LONG){
 		sw.power_off_ope_start = OFF;
 		// 規定時間以上連続押下と判断
@@ -1139,7 +1139,7 @@ static void sw_proc(void)
 	    if(mode == SYSTEM_MODE_INITIAL)
 	    {
 		evt_act( EVENT_POW_SW_LONG );
-//		led_green_off();
+		led_ctrl(false);
 	    }
 	}
 	// 電源SW押下タイマー再スタート 
@@ -1179,6 +1179,13 @@ void rtc_init(void)
 
     nrf_cal_set_time(year, month, week, day, hour, minute, second);
 }
+
+void led_ctrl(bool ctrl)
+{
+    nrf_gpio_pin_write(NRF_GPIO_PIN_MAP(0,10), ctrl); // LED 1:High 0:Low
+}
+
+
 /**
  * @}
  */
