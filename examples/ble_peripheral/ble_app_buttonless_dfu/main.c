@@ -914,6 +914,7 @@ int main(void)
     {
 	APP_ERROR_CHECK(err_code);
     }
+    playFromMemory(true);
 
     main_acl_init();
     main_acl_start();

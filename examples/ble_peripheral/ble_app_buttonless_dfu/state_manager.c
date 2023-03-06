@@ -175,6 +175,8 @@ static SYSTEM_MODE evt_idle_com( int evt)
 
     if(current_system_mode == SYSTEM_MODE_SENSING)
     {
+    	setSeqControl(0,0);
+	playFromMemory(true);
 	user_main_mode_sensing_after();
         calc_data_init();
     }
@@ -184,6 +186,9 @@ static SYSTEM_MODE evt_idle_com( int evt)
 static SYSTEM_MODE evt_sensing_chg( int evt)
 {
 	SYSTEM_MODE system_mode = SYSTEM_MODE_SENSING;
+	
+	setSeqControl(0,1);
+	playFromMemory(true);
 
 	user_main_mode_sensing_before();
 /*
