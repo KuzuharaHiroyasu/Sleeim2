@@ -1193,7 +1193,7 @@ uint32_t is_battery_charge(void)
 
 void led_ctrl(bool ctrl)
 {
-    nrf_gpio_pin_write(NRF_GPIO_PIN_MAP(0,10), ctrl); // LED 1:High 0:Low
+    nrf_gpio_pin_write(NRF_GPIO_PIN_MAP(0, 10), ctrl); // LED 1:High 0:Low
 }
 
 static void power_ctrl(bool ctrl)
