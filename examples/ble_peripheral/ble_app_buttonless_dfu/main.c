@@ -1032,12 +1032,13 @@ static void application_timers_start(void)
 
        err_code = app_timer_start(m_sw_timer_id, APP_TIMER_TICKS(TIMER_SW_PERIOD), NULL);
        APP_ERROR_CHECK(err_code);
-
+/*
        err_code = app_timer_start(m_result_timer_id, APP_TIMER_TICKS(TIMER_RESULT_PERIOD), NULL);
        APP_ERROR_CHECK(err_code);
 
        err_code = app_timer_start(m_acl_timer_id, APP_TIMER_TICKS(TIMER_ACL_PERIOD), NULL);
        APP_ERROR_CHECK(err_code);
+*/
 }
 
 void acl_timers_start(void)
