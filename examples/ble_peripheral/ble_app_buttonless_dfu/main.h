@@ -59,6 +59,12 @@
 #define TIME_20MS_CNT_POW_SW_SHORT		2
 #define TIME_2000MS_CNT_POW_SW_LONG		200
 
+// ìdírécó Ëáíl
+#define BAT_LEVEL_1_VAL					(uint16_t)( 1023.0 * (1.95 / 3.0 ))		// 1.95Và»è„
+#define BAT_LEVEL_2_VAL					(uint16_t)( 1023.0 * (1.72 / 3.0 ))		// 1.72Và»è„
+#define BAT_LEVEL_3_VAL					(uint16_t)( 1023.0 * (1.5 / 3.0 ))		// 1.5Và»è„
+#define BAT_LEVEL_CHG_FIN_VAL				(uint16_t)( 1023.0 * (2.0 / 3.0 ))		// 2.0Và»è„
+
 typedef enum{
     SEC_PHASE_0_10 = 0,					// 0Å`10ïbÇ‹Ç≈
     SEC_PHASE_10_20,					// 10Å`20ïbÇ‹Ç≈
@@ -90,6 +96,7 @@ void result_timers_start(void);
 void result_timers_stop(void);
 uint32_t is_battery_charge(void);
 void led_ctrl(bool ctrl);
+void get_battery_level(void);
 
 void notification_exe(uint8_t * data, uint8_t len);
 void indication_exe(uint8_t * data, uint8_t len);

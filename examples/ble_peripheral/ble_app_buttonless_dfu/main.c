@@ -1200,6 +1200,23 @@ static void power_ctrl(bool ctrl)
 {
     nrf_gpio_pin_write(NRF_GPIO_PIN_MAP(0, 4), ctrl); // POWER 1:High 0:Low
 }
+
+void get_battery_level(void)
+{
+    uint32_t battery_val = BAT_LEVEL_1_VAL;
+
+    battery_val = get_saadc_value( SAADC_CH_BATT );
+
+    if( battery_val >= BAT_LEVEL_1_VAL ){
+    	s_unit.battery_sts = BAT_LEVEL_STS_MAX;
+    }else if( battery_val >= BAT_LEVEL_2_VAL ){
+    	s_unit.battery_sts = BAT_LEVEL_STS_HIGH;
+    }else if( battery_val >= BAT_LEVEL_3_VAL ){
+    	s_unit.battery_sts = BAT_LEVEL_STS_LOW;
+    }else{
+    	s_unit.battery_sts = BAT_LEVEL_STS_MIN;
+    }
+}
 /**
  * @}
  */

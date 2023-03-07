@@ -193,10 +193,10 @@ static SYSTEM_MODE evt_sensing_chg( int evt)
 	user_main_mode_sensing_before();
 
 	uint32_t bat = is_battery_charge();
-/*	
-	//電池残量確認
-	main_set_battery();
 	
+	//電池残量確認
+	get_battery_level();
+/*	
 	if( s_unit.battery_sts == BAT_LEVEL_STS_MIN )
 	{
 		// 電池残量なしなら移行しない
