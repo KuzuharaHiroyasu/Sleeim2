@@ -132,16 +132,16 @@ int16_t get_saadc_value(int i)
     switch(i)
     {
 	case SAADC_CH_SNORE:		    // Ç¢Ç—Ç´
-	    value = m_buffer_pool[1][0];
+	    value = m_buffer_pool[0][0];
 	    break;
 	case SAADC_CH_HEARTRATE:	    // êSîè
-	    value = m_buffer_pool[1][1];
+	    value = m_buffer_pool[0][1];
 	    break;
 	case SAADC_CH_BATT:		    // è[ìd
-	    value = m_buffer_pool[1][2];
+	    value = m_buffer_pool[0][2];
 	    break;
 	case SAADC_CH_BREATH:		    // åƒãz
-	    value = m_buffer_pool[1][3];
+	    value = m_buffer_pool[0][3];
 	    break;	    
 	default:
 	    break;

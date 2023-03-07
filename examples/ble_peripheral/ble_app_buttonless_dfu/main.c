@@ -943,9 +943,9 @@ static void gpio_init(void)
     // input
 //    nrf_gpio_cfg_input(NRF_GPIO_PIN_MAP(0, 0), NRF_GPIO_PIN_PULLUP); // 空き
 //    nrf_gpio_cfg_input(NRF_GPIO_PIN_MAP(0, 1), NRF_GPIO_PIN_PULLUP); // 空き
-    nrf_gpio_cfg_input(NRF_GPIO_PIN_MAP(0, 2), NRF_GPIO_PIN_PULLUP); // ADC入力（イビキ）
-    nrf_gpio_cfg_input(NRF_GPIO_PIN_MAP(0, 3), NRF_GPIO_PIN_PULLUP); // ADC入力（心拍）
-    nrf_gpio_cfg_input(NRF_GPIO_PIN_MAP(0, 5), NRF_GPIO_PIN_PULLUP); // ADC入力（電池）
+//    nrf_gpio_cfg_input(NRF_GPIO_PIN_MAP(0, 2), NRF_GPIO_PIN_PULLUP); // ADC入力（イビキ）
+//    nrf_gpio_cfg_input(NRF_GPIO_PIN_MAP(0, 3), NRF_GPIO_PIN_PULLUP); // ADC入力（心拍）
+//    nrf_gpio_cfg_input(NRF_GPIO_PIN_MAP(0, 5), NRF_GPIO_PIN_PULLUP); // ADC入力（電池）
     nrf_gpio_cfg_input(NRF_GPIO_PIN_MAP(0, 6), NRF_GPIO_PIN_PULLDOWN); // SW入力
     nrf_gpio_cfg_input(NRF_GPIO_PIN_MAP(0, 9), NRF_GPIO_PIN_PULLUP); // 空き
     nrf_gpio_cfg_input(NRF_GPIO_PIN_MAP(0, 18), NRF_GPIO_PIN_PULLUP); // 充電

@@ -80,8 +80,8 @@ extern "C" {
  */
 #define NRFX_SAADC_DEFAULT_CHANNEL_CONFIG_SE(PIN_P) \
 {                                                   \
-    .resistor_p = NRF_SAADC_RESISTOR_DISABLED,      \
-    .resistor_n = NRF_SAADC_RESISTOR_DISABLED,      \
+    .resistor_p = NRF_SAADC_RESISTOR_PULLUP ,       \
+    .resistor_n = NRF_SAADC_RESISTOR_PULLUP ,       \
     .gain       = NRF_SAADC_GAIN1_6,                \
     .reference  = NRF_SAADC_REFERENCE_INTERNAL,     \
     .acq_time   = NRF_SAADC_ACQTIME_10US,           \
