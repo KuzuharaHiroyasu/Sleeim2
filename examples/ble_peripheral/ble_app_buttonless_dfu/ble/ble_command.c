@@ -174,7 +174,7 @@ static void main_ble_rcv_date( void )
     uint8_t tx[BLE_DATA_SIZE_MAX] = {0};
     uint32_t year, month, week, day, hour, minute, second;
 
-    year   = ble_rx_data.rcv_data[1];
+    year   = 2000 + ble_rx_data.rcv_data[1];
     month  = ble_rx_data.rcv_data[2];
     week   = ble_rx_data.rcv_data[3];
     day    = ble_rx_data.rcv_data[4];
@@ -182,13 +182,11 @@ static void main_ble_rcv_date( void )
     minute = ble_rx_data.rcv_data[6];
     second = ble_rx_data.rcv_data[7];
 
-    nrf_cal_set_time(year, month, day, hour, minute, second);
+    nrf_cal_set_time(year, month, week, day, hour, minute, second);
 
-    if( get_current_mode() != SYSTEM_MODE_IDLE_COM ){
-    	tx[0] = BLE_CMD_DATE_SET;
-    	tx[1] = BLE_DATA_RESULT_OK;
-    	main_ble_send( &tx[0], BLE_SND_LEN_DATE_SET );
-    }
+    tx[0] = BLE_CMD_DATE_SET;
+    tx[1] = BLE_DATA_RESULT_OK;
+    main_ble_send( &tx[0], BLE_SND_LEN_DATE_SET );
 }
 
 static void main_ble_rcv_info( void )

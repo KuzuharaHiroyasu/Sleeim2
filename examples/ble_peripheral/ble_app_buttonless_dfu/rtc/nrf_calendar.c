@@ -62,13 +62,14 @@ void nrf_cal_set_time(uint32_t year, uint32_t month, uint32_t week, uint32_t day
     CAL_RTC->TASKS_CLEAR = 1;  
     
     // Calculate the calibration offset 
+/*
     if(m_last_calibrate_time != 0)
     {
         difftime = newtime - m_last_calibrate_time;
         uncal_difftime = m_time - m_last_calibrate_time;
         m_calibrate_factor = (float)difftime / (float)uncal_difftime;
     }
-    
+*/    
     // Assign the new time to the local time variables
     m_time = m_last_calibrate_time = newtime;
 }    
