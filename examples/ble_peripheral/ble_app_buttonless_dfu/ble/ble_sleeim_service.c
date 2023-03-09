@@ -88,9 +88,10 @@ static void on_write(ble_sleeim_t * p_sleeim, ble_evt_t const * p_ble_evt)
         p_sleeim->sleeim_write_handler(p_ble_evt->evt.gap_evt.conn_handle, p_sleeim, &p_evt_write->data[0], p_evt_write->len);
 
         received_write_data_len = p_evt_write->len;
-        write_flag = true;
 	
 	main_ble_proc(p_evt_write->data, received_write_data_len);
+
+        write_flag = true;
 /*
         // Store received data in write buffer
         for(int i=0; i<p_evt_write->len; i++)
@@ -133,9 +134,10 @@ static void on_write_res(ble_sleeim_t * p_sleeim, ble_evt_t const * p_ble_evt)
 
         p_sleeim->sleeim_write_handler(p_ble_evt->evt.gatts_evt.conn_handle, p_sleeim, &p_evt_write->data[0], p_evt_write->len);
         received_write_data_len = p_evt_write->len;
-        write_flag = true;
 
 	main_ble_proc(p_evt_write->data, received_write_data_len);
+
+        write_flag = true;
 /*
         // Store received data in write buffer
         for(int i=0; i<p_evt_write->len; i++)

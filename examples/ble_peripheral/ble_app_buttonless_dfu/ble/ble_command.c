@@ -119,6 +119,7 @@ void main_ble_proc(uint8_t *p_data, uint8_t len )
 
 void main_ble_send( uint8_t *p_data, uint8_t len )
 {
+    memset(write_buf, 0, sizeof(write_buf));
     for(int i=0; i<len; i++)
     {
 	write_buf[i] = p_data[i];
