@@ -443,10 +443,10 @@ static void main_ble_diag_rcv_led( void )
     if(ble_rx_data.rcv_data[1] == BLE_DATA_DIAG_START)
     {
 	// LEDì_ìî
-//	led_on();
+	led_ctrl(true);
     }else{
 	// LEDè¡ìî
-//	led_off();
+	led_ctrl(false);
     }
 
     tx[0] = BLE_CMD_DIAG_LED;
