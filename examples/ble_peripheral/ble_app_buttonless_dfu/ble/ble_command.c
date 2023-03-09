@@ -123,7 +123,8 @@ void main_ble_send( uint8_t *p_data, uint8_t len )
     for(int i=0; i<len; i++)
     {
 	write_buf[i] = p_data[i];
-    }    
+    }
+    received_write_data_len = len;
 //    set_ble_rx_res_cmd(p_data, len);
 }
 /*
