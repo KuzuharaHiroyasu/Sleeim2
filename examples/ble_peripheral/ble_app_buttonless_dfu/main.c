@@ -1102,7 +1102,7 @@ static void sw_proc(void)
 		}
 	    }
 	}else{
-	    if(mode == SYSTEM_MODE_INITIAL)
+	    if(mode == SYSTEM_MODE_INITIAL && sw.sw_time_cnt >= TIME_2000MS_CNT_POW_SW_LONG)
 	    {
 		// INITIAL状態(初回電源ON時)は電源SW長押し確定時に回路ON、LED点灯
 		power_ctrl(true);
