@@ -76,6 +76,7 @@ void main_acl_read(void)
 
     // INT_REL読み出し　※割り込み要求クリア
     i2c_acl_read( ACCELEROMETER_ADDR, ACL_REG_ADR_INT_REL, &rd_data[0], 1 );
-
+    
+    printf("x:%d, y:%d, z:%d \r\n", rd_data[1], rd_data[3], rd_data[5]);
     calc_acl();
 }

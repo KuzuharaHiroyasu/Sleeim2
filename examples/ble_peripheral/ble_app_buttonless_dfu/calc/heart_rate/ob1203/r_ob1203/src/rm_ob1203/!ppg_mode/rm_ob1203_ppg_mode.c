@@ -163,11 +163,22 @@ static fsp_err_t rm_ob1203_ppg_open (rm_ob1203_ctrl_t * const p_api_ctrl, rm_ob1
     p_ctrl->buf[0] = RM_OB1203_REG_ADDR_PPG_IRLED_CURR_0;
     current_tmp    = p_ctrl->p_mode->ppg_ir_led_current & RM_OB1203_MASK_IR_LED_CURRENT;
     p_ctrl->buf[1] = (uint8_t) (current_tmp & RM_OB1203_MASK_8BITS);
-    p_ctrl->buf[2] = (uint8_t) (current_tmp >> 8);
+    err = i2c_heart_rate_write(&p_ctrl->buf[0], 2, 0);
+
+    p_ctrl->buf[0] = RM_OB1203_REG_ADDR_PPG_IRLED_CURR_0+1;
+    p_ctrl->buf[1] = (uint8_t) (current_tmp >> 8);
+    err = i2c_heart_rate_write(&p_ctrl->buf[0], 2, 0);
+
+    p_ctrl->buf[0] = RM_OB1203_REG_ADDR_PPG_IRLED_CURR_0+2;
     current_tmp    = p_ctrl->p_mode->ppg_red_led_current & RM_OB1203_MASK_RED_LED_CURRENT;
-    p_ctrl->buf[3] = (uint8_t) (current_tmp & RM_OB1203_MASK_8BITS);
-    p_ctrl->buf[4] = (uint8_t) (current_tmp >> 8);
-    err            = rm_ob1203_write(p_ctrl, &p_ctrl->buf[0], 5);
+    p_ctrl->buf[1] = (uint8_t) (current_tmp & RM_OB1203_MASK_8BITS);
+    err = i2c_heart_rate_write(&p_ctrl->buf[0], 2, 0);
+
+    p_ctrl->buf[0] = RM_OB1203_REG_ADDR_PPG_IRLED_CURR_0+3;
+    p_ctrl->buf[1] = (uint8_t) (current_tmp >> 8);
+    err = i2c_heart_rate_write(&p_ctrl->buf[0], 2, 0);
+
+//    err            = rm_ob1203_write(p_ctrl, &p_ctrl->buf[0], 5);
     FSP_ERROR_RETURN(FSP_SUCCESS == err, err);
 
     /* Set power save mode and LED order */
@@ -181,19 +192,22 @@ static fsp_err_t rm_ob1203_ppg_open (rm_ob1203_ctrl_t * const p_api_ctrl, rm_ob1
     p_ctrl->buf[0] = RM_OB1203_REG_ADDR_PPG_CAN_ANA;
     p_ctrl->buf[1] =
         (uint8_t) ((uint8_t) (p_ctrl->p_mode->ppg_ir_led_ana_can << 2) | (uint8_t) p_ctrl->p_mode->ppg_red_led_ana_can);
-    err = rm_ob1203_write(p_ctrl, &p_ctrl->buf[0], 2);
+//    err = rm_ob1203_write(p_ctrl, &p_ctrl->buf[0], 2);
+    err = i2c_heart_rate_write(&p_ctrl->buf[0], 2, 0);
     FSP_ERROR_RETURN(FSP_SUCCESS == err, err);
 
     /* Set number of averaged samples */
     p_ctrl->buf[0] = RM_OB1203_REG_ADDR_PPG_AVG;
     p_ctrl->buf[1] = (uint8_t) ((uint8_t) p_ctrl->p_mode->ppg_num_averaged_samples | RM_OB1203_REG_DATA_PPG_AVG);
-    err            = rm_ob1203_write(p_ctrl, &p_ctrl->buf[0], 2);
+    err = i2c_heart_rate_write(&p_ctrl->buf[0], 2, 0);
+//    err            = rm_ob1203_write(p_ctrl, &p_ctrl->buf[0], 2);
     FSP_ERROR_RETURN(FSP_SUCCESS == err, err);
 
     /* Set pulse width and measurement period */
     p_ctrl->buf[0] = RM_OB1203_REG_ADDR_PPG_PWIDTH_PERIOD;
     p_ctrl->buf[1] = (uint8_t) p_ctrl->p_mode->ppg_width_period;
-    err            = rm_ob1203_write(p_ctrl, &p_ctrl->buf[0], 2);
+    err = i2c_heart_rate_write(&p_ctrl->buf[0], 2, 0);
+//    err            = rm_ob1203_write(p_ctrl, &p_ctrl->buf[0], 2);
     FSP_ERROR_RETURN(FSP_SUCCESS == err, err);
 
     /* Set FIFO configuration */
@@ -201,15 +215,28 @@ static fsp_err_t rm_ob1203_ppg_open (rm_ob1203_ctrl_t * const p_api_ctrl, rm_ob1
     p_ctrl->buf[1] =
         (uint8_t) ((uint8_t) p_ctrl->p_mode->ppg_fifo_rollover |
                    (uint8_t) (p_ctrl->p_mode->ppg_fifo_empty_num & RM_OB1203_MASK_FIFO_AFULL));
-    err = rm_ob1203_write(p_ctrl, &p_ctrl->buf[0], 2);
+    err = i2c_heart_rate_write(&p_ctrl->buf[0], 2, 0);
+//    err = rm_ob1203_write(p_ctrl, &p_ctrl->buf[0], 2);
     FSP_ERROR_RETURN(FSP_SUCCESS == err, err);
 
     /* Reset FIFO information */
     p_ctrl->buf[0] = RM_OB1203_REG_ADDR_FIFO_WR_PTR;
     p_ctrl->buf[1] = 0x00;
-    p_ctrl->buf[2] = 0x00;
-    p_ctrl->buf[3] = 0x00;
-    err            = rm_ob1203_write(p_ctrl, &p_ctrl->buf[0], 4);
+//    p_ctrl->buf[2] = 0x00;
+//    p_ctrl->buf[3] = 0x00;
+
+    err = i2c_heart_rate_write(&p_ctrl->buf[0], 2, 0);
+//    err            = rm_ob1203_write(p_ctrl, &p_ctrl->buf[0], 4);
+    FSP_ERROR_RETURN(FSP_SUCCESS == err, err);
+
+    p_ctrl->buf[0] = RM_OB1203_REG_ADDR_FIFO_WR_PTR+1;
+    p_ctrl->buf[1] = 0x00;
+    err = i2c_heart_rate_write(&p_ctrl->buf[0], 2, 0);
+    FSP_ERROR_RETURN(FSP_SUCCESS == err, err);
+
+    p_ctrl->buf[0] = RM_OB1203_REG_ADDR_FIFO_WR_PTR+2;
+    p_ctrl->buf[1] = 0x00;
+    err = i2c_heart_rate_write(&p_ctrl->buf[0], 2, 0);
     FSP_ERROR_RETURN(FSP_SUCCESS == err, err);
 
     /* Set device interrupt configurations */
@@ -231,7 +258,13 @@ static fsp_err_t rm_ob1203_ppg_open (rm_ob1203_ctrl_t * const p_api_ctrl, rm_ob1
     p_ctrl->buf[0] = RM_OB1203_REG_ADDR_DIG_LED1_TRIM;
     p_ctrl->buf[1] = 0x00;
     p_ctrl->buf[2] = 0x00;
-    err            = rm_ob1203_write(p_ctrl, &p_ctrl->buf[0], 3);
+    err = i2c_heart_rate_write(&p_ctrl->buf[0], 2, 0);
+//    err            = rm_ob1203_write(p_ctrl, &p_ctrl->buf[0], 3);
+    FSP_ERROR_RETURN(FSP_SUCCESS == err, err);
+
+    p_ctrl->buf[0] = RM_OB1203_REG_ADDR_DIG_LED1_TRIM+1;
+    p_ctrl->buf[1] = 0x00;
+    err = i2c_heart_rate_write(&p_ctrl->buf[0], 2, 0);
     FSP_ERROR_RETURN(FSP_SUCCESS == err, err);
 
     return FSP_SUCCESS;
@@ -258,15 +291,23 @@ static fsp_err_t rm_ob1203_ppg_close (rm_ob1203_ctrl_t * const p_api_ctrl)
  **********************************************************************************************************************/
 static fsp_err_t rm_ob1203_ppg_measurement_start (rm_ob1203_ctrl_t * const p_api_ctrl)
 {
+    uint8_t wr_data[2] = {0};
     fsp_err_t err = FSP_SUCCESS;
     rm_ob1203_instance_ctrl_t * p_ctrl = (rm_ob1203_instance_ctrl_t *) p_api_ctrl;
     uint8_t main_ctrl_1;
 
     /* Start measurement */
     main_ctrl_1 = (uint8_t) ((uint8_t) p_ctrl->p_mode->ppg_sensor_mode | RM_OB1203_COMMAND_MEASUREMENT_START);
-    err         = rm_ob1203_main_ctrl_register_write(p_ctrl, 0x00, main_ctrl_1);
+    printf("rm_ob1203_ppg_measurement_start \r\n");
+    wr_data[0] = 0x16;	// 0x16
+    wr_data[1] = main_ctrl_1;
+//    err         = rm_ob1203_main_ctrl_register_write(p_ctrl, 0x00, main_ctrl_1);
+    err = i2c_heart_rate_write(&wr_data[0], 2, 0);
     FSP_ERROR_RETURN(FSP_SUCCESS == err, err);
 
+    uint8_t _regValue[2] = {0};
+    
+    i2c_heart_rate_read(0x51, 0x16, &_regValue[0], 2, 0);
     return FSP_SUCCESS;
 }
 
@@ -286,7 +327,10 @@ static fsp_err_t rm_ob1203_ppg_measurement_stop (rm_ob1203_ctrl_t * const p_api_
     p_ctrl->fifo_reset = true;
 
     /* Stop measurement */
-    err = rm_ob1203_main_ctrl_register_write(p_ctrl, 0x00, 0x00);
+	printf("rm_ob1203_ppg_measurement_stop");
+//    err = rm_ob1203_main_ctrl_register_write(p_ctrl, 0x00, 0x00);
+    err = i2c_heart_rate_write(0x15, 0x00, 0);
+    err = i2c_heart_rate_write(0x16, 0x00, 0);
     FSP_ERROR_RETURN(FSP_SUCCESS == err, err);
 
  #if BSP_CFG_RTOS
@@ -403,7 +447,8 @@ static fsp_err_t rm_ob1203_ppg_read (rm_ob1203_ctrl_t * const     p_api_ctrl,
     write_read_params.src_bytes  = 1;
     write_read_params.p_dest     = (uint8_t *) p_raw_data;
     write_read_params.dest_bytes = bytes;
-    err = rm_ob1203_read(p_ctrl, write_read_params);
+//    err = rm_ob1203_read(p_ctrl, write_read_params);
+    err = i2c_heart_rate_read(0x51, RM_OB1203_REG_ADDR_FIFO_DATA, &p_raw_data, bytes);
     FSP_ERROR_RETURN(FSP_SUCCESS == err, err);
 
     return FSP_SUCCESS;

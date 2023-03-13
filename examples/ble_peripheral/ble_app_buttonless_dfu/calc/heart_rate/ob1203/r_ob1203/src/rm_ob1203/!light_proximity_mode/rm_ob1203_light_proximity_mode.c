@@ -260,6 +260,7 @@ static fsp_err_t rm_ob1203_light_prox_measurement_start (rm_ob1203_ctrl_t * cons
         (uint8_t) ((uint8_t) p_ctrl->p_mode->light_sleep | (uint8_t) p_ctrl->p_mode->light_sensor_mode |
                    RM_OB1203_COMMAND_MEASUREMENT_START);
     main_ctrl_1 = (uint8_t) ((uint8_t) p_ctrl->p_mode->prox_sleep | RM_OB1203_COMMAND_MEASUREMENT_START);
+	printf("rm_ob1203_light_prox_measurement_start");
     err         = rm_ob1203_main_ctrl_register_write(p_ctrl, main_ctrl_0, main_ctrl_1);
     FSP_ERROR_RETURN(FSP_SUCCESS == err, err);
 
@@ -285,6 +286,7 @@ static fsp_err_t rm_ob1203_light_prox_measurement_stop (rm_ob1203_ctrl_t * const
     }
 
     /* Stop measurement */
+	printf("rm_ob1203_light_prox_measurement_stop");
     err = rm_ob1203_main_ctrl_register_write(p_ctrl, 0x00, 0x00);
     FSP_ERROR_RETURN(FSP_SUCCESS == err, err);
 

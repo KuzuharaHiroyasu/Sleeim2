@@ -390,7 +390,7 @@ ret_code_t vib_init(void)
 bool vib_begin( void )
 {
   
-  uint8_t chipRev;
+  uint8_t chipRev = 0;
 
   uint8_t tempRegVal = _readRegister(CHIP_REV_REG); 
   chipRev |= tempRegVal << 8;

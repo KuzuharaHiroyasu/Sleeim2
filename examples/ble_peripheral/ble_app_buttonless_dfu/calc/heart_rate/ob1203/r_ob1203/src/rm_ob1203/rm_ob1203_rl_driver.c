@@ -69,7 +69,7 @@ fsp_err_t rm_ob1203_delay_ms (rm_ob1203_ctrl_t * const p_ctrl, uint32_t const de
  **********************************************************************************************************************/
 fsp_err_t rm_ob1203_irq_open (rm_ob1203_ctrl_t * const p_api_ctrl)
 {
-#if RM_OB1203_CFG_IRQ_ENABLE
+#ifndef RM_OB1203_CFG_IRQ_ENABLE
     fsp_err_t err = FSP_SUCCESS;
     rm_ob1203_instance_ctrl_t * p_ctrl = (rm_ob1203_instance_ctrl_t *) p_api_ctrl;
     external_irq_instance_t   * p_irq  = (external_irq_instance_t *) p_ctrl->p_irq_instance;

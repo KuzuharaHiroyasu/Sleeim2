@@ -54,7 +54,7 @@ extern "C" {
 
 #define HEART_RATE_SENSOR_ADDR		  0x53
 #define VIBRATION_ADDR			  0x4A
-#define ACCELEROMETER_ADDR		  0x0E
+#define ACCELEROMETER_ADDR		  0x1C
 #define EEPROM_SIM_ADDR                   0xA0    //!< Simulated EEPROM TWI slave address.
 
 #define EEPROM_SIM_SIZE                   (320u) //!< Simulated EEPROM 

@@ -157,7 +157,7 @@ fsp_err_t rm_comms_i2c_bus_write(rm_comms_ctrl_t * const p_api_ctrl, uint8_t * c
         uint8_t      wait = 0xFF;
 
 //        status = (p_iica_api->write)((p_device_cfg->slave_address << 1), p_src, bytes, wait);
-	status = (MD_STATUS)i2c_heart_rate_write((p_device_cfg->slave_address), p_src, (uint8_t)bytes, wait);
+	status = (MD_STATUS)i2c_heart_rate_write(*p_src, (uint8_t)bytes, wait);
         switch (status)
         {
             case MD_OK:
@@ -218,7 +218,7 @@ fsp_err_t rm_comms_i2c_bus_write_read (rm_comms_ctrl_t * const p_api_ctrl, rm_co
         uint8_t      wait = 0xFF;
 
 //        status = (p_iica_api->write)((p_device_cfg->slave_address << 1), write_read_params.p_src, write_read_params.src_bytes, wait);
-	status = (MD_STATUS)i2c_heart_rate_write((p_device_cfg->slave_address), write_read_params.p_src, (uint8_t)write_read_params.src_bytes, wait);
+	status = (MD_STATUS)i2c_heart_rate_read((p_device_cfg->slave_address), *write_read_params.p_src, (uint8_t)write_read_params.src_bytes, wait);
 	
         switch (status)
         {

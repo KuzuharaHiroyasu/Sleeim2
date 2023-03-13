@@ -4,7 +4,7 @@
 // タイマー周期（ｍｓ）
 #define TIMER_MIC_GET_PERIOD	    50
 #define TIMER_SW_PERIOD		    10
-#define TIMER_ACL_PERIOD	    10000
+#define TIMER_ACL_PERIOD	    1000
 #define TIMER_RESULT_PERIOD	    30000
 
 // EEPROM

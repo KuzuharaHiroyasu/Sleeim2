@@ -256,6 +256,7 @@ static fsp_err_t rm_ob1203_prox_measurement_start (rm_ob1203_ctrl_t * const p_ap
 
     /* Start measurement */
     main_ctrl_1 = (uint8_t) ((uint8_t) p_ctrl->p_mode->prox_sleep | RM_OB1203_COMMAND_MEASUREMENT_START);
+	printf("rm_ob1203_prox_measurement_start");
     err         = rm_ob1203_main_ctrl_register_write(p_ctrl, 0x00, main_ctrl_1);
     FSP_ERROR_RETURN(FSP_SUCCESS == err, err);
 
@@ -281,6 +282,7 @@ static fsp_err_t rm_ob1203_prox_measurement_stop (rm_ob1203_ctrl_t * const p_api
     }
 
     /* Stop measurement */
+	printf("rm_ob1203_prox_measurement_stop");
     err = rm_ob1203_main_ctrl_register_write(p_ctrl, 0x00, 0x00);
     FSP_ERROR_RETURN(FSP_SUCCESS == err, err);
 
